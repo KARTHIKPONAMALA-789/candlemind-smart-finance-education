@@ -249,10 +249,41 @@ function Field({ label, placeholder }: { label: string; placeholder: string }) {
 }
 
 function LiveTab() {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const { data } = useTutorData();
+  const dbClasses = data?.liveClasses ?? [];
+  const items = dbClasses.length
+    ? dbClasses.map((l: any) => {
+        const date = new Date(l.scheduled_date);
+        const status = date < new Date(Date.now() - l.duration_min * 60_000) ? "past" : date < new Date() ? "live" : "upcoming";
+        return { id: l.id, title: l.class_title, when: date.toLocaleString(), duration: `${l.duration_min}m`, attendees: 0, status };
+      })
+    : mockLiveClasses;
+
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
+  const [duration, setDuration] = useState("60");
+  const [link, setLink] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !title || !date) return;
+    const { error } = await supabase.from("live_classes").insert({
+      tutor_id: user.id, class_title: title, scheduled_date: new Date(date).toISOString(),
+      duration_min: Number(duration) || 60, meeting_link: link || null,
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Live class scheduled");
+    setTitle(""); setDate(""); setLink("");
+    qc.invalidateQueries({ queryKey: ["tutor-dashboard"] });
+  };
+
   return (
     <div className="grid lg:grid-cols-3 gap-4">
       <div className="lg:col-span-2 space-y-3">
-        {liveClasses.map((l) => (
+        {items.length === 0 && <div className="glass rounded-2xl p-8 text-center text-sm text-muted-foreground">No live classes yet — schedule one →</div>}
+        {items.map((l: any) => (
           <div key={l.id} className="glass rounded-2xl p-4 flex items-center gap-4">
             <div className={`size-12 rounded-xl grid place-items-center ${l.status === "live" ? "bg-destructive/15 text-destructive" : "bg-primary/15 text-primary"}`}>
               <CalendarClock className="size-5" />
@@ -263,18 +294,30 @@ function LiveTab() {
                 <span className="text-muted-foreground">· {l.duration}</span>
               </div>
               <div className="font-medium text-sm">{l.title}</div>
-              <div className="text-xs text-muted-foreground">{l.when} · {l.attendees} registered</div>
+              <div className="text-xs text-muted-foreground">{l.when}</div>
             </div>
             <button className="text-xs px-3 py-1.5 rounded-lg bg-secondary border border-border hover:bg-foreground/5 transition">Manage</button>
           </div>
         ))}
       </div>
-      <form onSubmit={(e) => { e.preventDefault(); toast.success("Live class scheduled"); }} className="glass-strong rounded-2xl p-5 space-y-3">
+      <form onSubmit={submit} className="glass-strong rounded-2xl p-5 space-y-3">
         <div className="text-sm font-medium">Schedule live class</div>
-        <Field label="Title" placeholder="e.g. Earnings season recap" />
-        <Field label="Date & time" placeholder="e.g. Fri 7:00 PM" />
-        <Field label="Duration" placeholder="e.g. 45m" />
-        <Field label="Meeting link" placeholder="https://meet..." />
+        <div>
+          <div className="text-xs font-medium mb-1.5">Title</div>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Earnings season recap" className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Date & time</div>
+          <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Duration (min)</div>
+          <input value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="60" className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Meeting link</div>
+          <input value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://meet..." className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
         <button type="submit" className="w-full px-4 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">Schedule</button>
       </form>
     </div>
