@@ -1,15 +1,13 @@
-import { Flame } from "lucide-react";
+import { Logo } from "@/components/site/Logo";
 
 export function Footer() {
   return (
     <footer className="mt-32 border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center">
-              <Flame className="size-4 text-primary-foreground" />
-            </div>
-            <span className="font-display font-semibold">CandleMind</span>
+          <div className="flex items-center gap-3">
+            <Logo variant="mark" size={36} />
+            <span className="font-display font-semibold text-base">CandleMinds</span>
           </div>
           <p className="mt-4 text-sm text-muted-foreground max-w-sm">
             AI-powered fintech education. Learn the markets like you play a game — backed by data,
@@ -29,7 +27,7 @@ export function Footer() {
         ))}
       </div>
       <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} CandleMind. Built for learners.
+        © {new Date().getFullYear()} CandleMinds — Learn. Trade. Grow.
       </div>
     </footer>
   );

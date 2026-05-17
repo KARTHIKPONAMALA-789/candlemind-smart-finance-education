@@ -1,9 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Flame, Bell, Search, Settings, LogOut } from "lucide-react";
+import { Bell, Search, Settings, LogOut } from "lucide-react";
 import { ReactNode } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { navForRole } from "@/lib/role-nav";
+import { Logo } from "@/components/site/Logo";
 
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -25,12 +26,10 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
     <div className="min-h-screen flex">
       {showSidebar && (
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/60 backdrop-blur-xl">
-        <Link to="/" className="flex items-center gap-2 px-5 h-16 border-b border-border">
-          <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-            <Flame className="size-4 text-primary-foreground" />
-          </div>
+        <Link to="/" className="flex items-center gap-2 px-5 h-16 border-b border-border" aria-label="CandleMinds home">
+          <Logo variant="mark" size={32} />
           <div className="flex flex-col leading-tight">
-            <span className="font-display font-semibold">CandleMind</span>
+            <span className="font-display font-semibold">CandleMinds</span>
             <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{roleLabel} portal</span>
           </div>
         </Link>

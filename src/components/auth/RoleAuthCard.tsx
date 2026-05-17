@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Flame, Mail, GraduationCap, Briefcase, Shield, Loader2 } from "lucide-react";
+import { Mail, GraduationCap, Briefcase, Shield, Loader2 } from "lucide-react";
+import { Logo } from "@/components/site/Logo";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,11 +84,9 @@ export function RoleAuthCard({ role, mode }: { role: Role; mode: "login" | "regi
         <div className="absolute inset-0 grid-bg opacity-30" />
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[500px] rounded-full bg-gradient-to-br ${meta.color} opacity-20 blur-3xl animate-pulse-glow`} />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative max-w-md">
-          <Link to="/" className="flex items-center gap-2 mb-10">
-            <div className="size-9 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-              <Flame className="size-4 text-primary-foreground" />
-            </div>
-            <span className="font-display text-lg font-semibold">CandleMind</span>
+          <Link to="/" className="flex items-center gap-3 mb-10" aria-label="CandleMinds home">
+            <Logo variant="mark" size={40} />
+            <span className="font-display text-lg font-semibold">CandleMinds</span>
           </Link>
           <div className={`inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs mb-4 bg-gradient-to-br ${meta.color} text-primary-foreground`}>
             <meta.icon className="size-3" /> {meta.label} portal
