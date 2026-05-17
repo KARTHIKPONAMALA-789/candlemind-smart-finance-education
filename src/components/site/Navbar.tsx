@@ -17,16 +17,17 @@ export function Navbar() {
           </div>
           <span className="font-display font-semibold tracking-tight">CandleMind</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
+        <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition">Features</a>
-          <a href="#preview" className="hover:text-foreground transition">Dashboard</a>
+          <Link to="/courses" className="hover:text-foreground transition">Courses</Link>
+          <Link to="/screener" className="hover:text-foreground transition">Screeners</Link>
+          <Link to="/tutor" className="hover:text-foreground transition">AI Tutor</Link>
           <a href="#pricing" className="hover:text-foreground transition">Pricing</a>
-          <Link to="/admin" className="hover:text-foreground transition">Admin</Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Link to="/login" className="text-sm px-3 py-1.5 rounded-lg hover:bg-white/5 transition">Sign in</Link>
+          <Link to="/auth" className="text-sm px-3 py-1.5 rounded-lg hover:bg-white/5 transition">Sign in</Link>
           <Link
-            to="/signup"
+            to="/auth"
             className="text-sm px-4 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
           >
             Get started
