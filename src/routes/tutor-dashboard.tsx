@@ -1,8 +1,8 @@
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute, useSearch, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo, useRef, type DragEvent, type ChangeEvent } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { BookOpen, Users, DollarSign, TrendingUp, Plus, Star, Eye, Upload, Radio, CalendarClock, BarChart3, Send } from "lucide-react";
+import { BookOpen, Users, DollarSign, TrendingUp, Plus, Star, Eye, Upload, Radio, CalendarClock, BarChart3, Send, Check, X, FileText, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { useAuth } from "@/hooks/use-auth";
