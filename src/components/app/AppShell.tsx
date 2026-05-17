@@ -8,8 +8,16 @@ import { navForRole } from "@/lib/role-nav";
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { role, user, signOut } = useAuth();
-  const nav = navForRole(role);
-  const roleLabel = role ? role.charAt(0).toUpperCase() + role.slice(1) : "Guest";
+  // MVP: infer role from current route when auth role is unavailable, so
+  // admin/tutor dashboards never show the student sidebar.
+  const inferredRole: "admin" | "tutor" | "student" | null = pathname.startsWith("/admin-dashboard")
+    ? "admin"
+    : pathname.startsWith("/tutor-dashboard")
+    ? "tutor"
+    : role ?? "student";
+  const effectiveRole = role ?? inferredRole;
+  const nav = navForRole(effectiveRole);
+  const roleLabel = effectiveRole ? effectiveRole.charAt(0).toUpperCase() + effectiveRole.slice(1) : "Guest";
   const displayName = (user?.user_metadata?.full_name as string) ?? user?.email?.split("@")[0] ?? "Learner";
 
   return (
