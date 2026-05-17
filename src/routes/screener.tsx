@@ -1,3 +1,4 @@
+import { RoleGuard } from "@/components/auth/RoleGuard";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
@@ -8,7 +9,7 @@ import { ResponsiveContainer, LineChart, Line, Tooltip } from "recharts";
 
 export const Route = createFileRoute("/screener")({
   head: () => ({ meta: [{ title: "Screener — CandleMind" }] }),
-  component: Screener,
+  component: () => <RoleGuard allow={["student"]}><Screener /></RoleGuard>,
 });
 
 const spark = (seed: number) =>
