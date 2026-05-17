@@ -226,3 +226,8 @@
 .ai-md em { color: var(--muted-foreground); font-style: italic; }
 .ai-md p { line-height: 1.6; }
 .ai-md code { background: oklch(0.21 0.04 260 / 18%); padding: 0.1rem 0.35rem; border-radius: 0.35rem; font-size: 0.8em; }
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
