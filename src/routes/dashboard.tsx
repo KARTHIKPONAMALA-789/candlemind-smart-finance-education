@@ -20,9 +20,31 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
-  const pnl = paperHoldings.reduce((s, h) => s + (h.last - h.avg) * h.qty, 0);
-  const portfolio = paperHoldings.reduce((s, h) => s + h.last * h.qty, 0);
-  const consistency = Math.round(consistencyWeek.reduce((s, d) => s + d.score, 0) / consistencyWeek.length);
+  const { user } = useAuth();
+  const { data } = useQuery({
+    queryKey: ["student-dashboard", user?.id],
+    queryFn: () => fetchStudentOverview(user!.id),
+    enabled: !!user,
+  });
+
+  const paperTrades = data?.paperTrades ?? [];
+  const holdings = paperTrades.length
+    ? paperTrades.map((t: any) => ({ ticker: t.ticker, qty: Number(t.quantity), avg: Number(t.buy_price), last: Number(t.current_price) }))
+    : mockHoldings;
+  const broadcasts = data?.broadcasts.length
+    ? data.broadcasts.map((b: any) => ({
+        id: b.id, type: "announcement" as const, title: b.title, body: b.message,
+        when: new Date(b.created_at).toLocaleDateString(), pinned: b.priority === "high",
+      }))
+    : mockBroadcasts;
+
+  const pnl = holdings.reduce((s, h) => s + (h.last - h.avg) * h.qty, 0);
+  const portfolio = holdings.reduce((s, h) => s + h.last * h.qty, 0);
+  const consistency = data?.profile?.consistency_score || Math.round(consistencyWeek.reduce((s, d) => s + d.score, 0) / consistencyWeek.length);
+  const xp = data?.profile?.xp ?? 2840;
+  const streak = data?.profile?.streak ?? 42;
+  const mastery = data?.avgQuiz ?? 87;
+  const firstName = data?.profile?.full_name?.split(" ")[0] ?? "there";
 
   return (
     <AppShell title="Good morning, Alex 👋" subtitle="You're on a 42-day streak. Let's keep it going.">
