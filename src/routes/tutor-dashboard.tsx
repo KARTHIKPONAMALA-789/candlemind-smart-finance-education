@@ -73,20 +73,20 @@ function TutorDashboard() {
             <div className="text-sm font-medium">Your courses</div>
             <div className="text-xs text-muted-foreground">Performance overview</div>
           </div>
-          <button className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition">
+          <button className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition">
             <Plus className="size-3.5" /> New course
           </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="text-xs text-muted-foreground border-b border-white/5">
+            <thead className="text-xs text-muted-foreground border-b border-border">
               <tr><th className="text-left py-2 font-medium">Course</th><th className="text-left font-medium">Students</th><th className="text-left font-medium">Rating</th><th className="text-left font-medium">Revenue</th><th className="text-left font-medium">Progress</th></tr>
             </thead>
             <tbody>
               {myCourses.map((c) => (
-                <motion.tr key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-white/5">
+                <motion.tr key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border">
                   <td className="py-3 flex items-center gap-3">
-                    <div className={`size-9 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-background font-semibold text-xs`}>
+                    <div className={`size-9 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-primary-foreground font-semibold text-xs`}>
                       <BookOpen className="size-4" />
                     </div>
                     <div>
@@ -98,7 +98,7 @@ function TutorDashboard() {
                   <td className="text-primary">{c.rating} ★</td>
                   <td>${c.revenue.toLocaleString()}</td>
                   <td className="w-40">
-                    <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-foreground/5 overflow-hidden">
                       <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
                     </div>
                   </td>

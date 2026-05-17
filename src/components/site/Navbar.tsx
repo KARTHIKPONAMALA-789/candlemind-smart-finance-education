@@ -13,7 +13,7 @@ export function Navbar() {
       <div className="glass-strong rounded-2xl px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-            <Flame className="size-4 text-background" />
+            <Flame className="size-4 text-primary-foreground" />
           </div>
           <span className="font-display font-semibold tracking-tight">CandleMind</span>
         </Link>
@@ -25,10 +25,10 @@ export function Navbar() {
           <a href="#pricing" className="hover:text-foreground transition">Pricing</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Link to="/auth" className="text-sm px-3 py-1.5 rounded-lg hover:bg-white/5 transition">Sign in</Link>
+          <Link to="/auth" className="text-sm px-3 py-1.5 rounded-lg hover:bg-foreground/5 transition">Sign in</Link>
           <Link
             to="/auth"
-            className="text-sm px-4 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
+            className="text-sm px-4 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition"
           >
             Get started
           </Link>

@@ -21,10 +21,10 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-white/5 bg-sidebar/60 backdrop-blur-xl">
-        <Link to="/" className="flex items-center gap-2 px-5 h-16 border-b border-white/5">
+      <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/60 backdrop-blur-xl">
+        <Link to="/" className="flex items-center gap-2 px-5 h-16 border-b border-border">
           <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-            <Flame className="size-4 text-background" />
+            <Flame className="size-4 text-primary-foreground" />
           </div>
           <span className="font-display font-semibold">CandleMind</span>
         </Link>
@@ -36,7 +36,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
                 key={n.to}
                 to={n.to}
                 className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition
-                  ${active ? "text-foreground bg-white/5" : "text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+                  ${active ? "text-foreground bg-foreground/5" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"}`}
               >
                 {active && (
                   <motion.div
@@ -51,10 +51,10 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
             );
           })}
         </nav>
-        <div className="p-4 border-t border-white/5">
+        <div className="p-4 border-t border-border">
           <div className="glass rounded-xl p-3 text-xs">
             <div className="flex items-center gap-2 mb-2">
-              <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-background font-semibold">A</div>
+              <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground font-semibold">A</div>
               <div>
                 <div className="text-foreground font-medium">Alex Rivera</div>
                 <div className="text-muted-foreground">Pro plan</div>
@@ -66,7 +66,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
 
       {/* Main */}
       <div className="flex-1 min-w-0">
-        <header className="h-16 border-b border-white/5 px-4 lg:px-8 flex items-center justify-between bg-background/40 backdrop-blur-xl sticky top-0 z-30">
+        <header className="h-16 border-b border-border px-4 lg:px-8 flex items-center justify-between bg-background/40 backdrop-blur-xl sticky top-0 z-30">
           <div>
             <h1 className="font-display text-xl font-semibold">{title}</h1>
             {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
@@ -75,12 +75,12 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
             <div className="hidden md:flex items-center gap-2 glass rounded-xl px-3 py-1.5 w-72">
               <Search className="size-4 text-muted-foreground" />
               <input className="bg-transparent outline-none text-sm flex-1" placeholder="Search lessons, stocks..." />
-              <kbd className="text-[10px] text-muted-foreground border border-white/10 rounded px-1.5 py-0.5">⌘K</kbd>
+              <kbd className="text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">⌘K</kbd>
             </div>
-            <button className="glass size-9 rounded-xl grid place-items-center hover:bg-white/10 transition">
+            <button className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition">
               <Bell className="size-4" />
             </button>
-            <button className="glass size-9 rounded-xl grid place-items-center hover:bg-white/10 transition">
+            <button className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition">
               <Settings className="size-4" />
             </button>
           </div>

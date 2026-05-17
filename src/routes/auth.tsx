@@ -26,7 +26,7 @@ function RoleChooser() {
       >
         <Link to="/" className="flex items-center justify-center gap-2 mb-10">
           <div className="size-9 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-            <Flame className="size-4 text-background" />
+            <Flame className="size-4 text-primary-foreground" />
           </div>
           <span className="font-display text-lg font-semibold">CandleMind</span>
         </Link>
@@ -50,20 +50,20 @@ function RoleChooser() {
             >
               <div className={`absolute -top-10 -right-10 size-40 rounded-full bg-gradient-to-br ${r.color} opacity-20 blur-2xl group-hover:opacity-40 transition`} />
               <div className={`size-12 rounded-xl bg-gradient-to-br ${r.color} grid place-items-center mb-4 shadow-lg`}>
-                <r.icon className="size-6 text-background" />
+                <r.icon className="size-6 text-primary-foreground" />
               </div>
               <h3 className="font-display text-lg font-semibold">{r.label}</h3>
               <p className="text-sm text-muted-foreground mt-1 min-h-[3rem]">{r.desc}</p>
               <div className="mt-5 flex gap-2">
                 <Link
                   to="/auth/$role/login" params={{ role: r.id }}
-                  className="flex-1 text-center py-2 rounded-lg glass hover:bg-white/10 text-sm transition"
+                  className="flex-1 text-center py-2 rounded-lg glass hover:bg-foreground/10 text-sm transition"
                 >
                   Sign in
                 </Link>
                 <Link
                   to="/auth/$role/register" params={{ role: r.id }}
-                  className="flex-1 inline-flex items-center justify-center gap-1 py-2 rounded-lg bg-[image:var(--gradient-primary)] text-background text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
+                  className="flex-1 inline-flex items-center justify-center gap-1 py-2 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
                 >
                   Register <ArrowRight className="size-3.5" />
                 </Link>

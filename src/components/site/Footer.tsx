@@ -2,12 +2,12 @@ import { Flame } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="mt-32 border-t border-white/5">
+    <footer className="mt-32 border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center">
-              <Flame className="size-4 text-background" />
+              <Flame className="size-4 text-primary-foreground" />
             </div>
             <span className="font-display font-semibold">CandleMind</span>
           </div>
@@ -28,7 +28,7 @@ export function Footer() {
           </div>
         ))}
       </div>
-      <div className="border-t border-white/5 py-5 text-center text-xs text-muted-foreground">
+      <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} CandleMind. Built for learners.
       </div>
     </footer>
