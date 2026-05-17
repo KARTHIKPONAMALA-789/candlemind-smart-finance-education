@@ -1,36 +1,73 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "google/gemini-2.5-flash";
+const LOVABLE_GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const LOVABLE_MODEL = "google/gemini-2.5-flash";
+const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_URL = (model: string) =>
+  `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
-async function callGateway(system: string, user: string) {
-  const apiKey = process.env.LOVABLE_API_KEY;
-  if (!apiKey) return { content: "AI mentor is temporarily unavailable. Please try again shortly.", error: "missing_key" as const };
+type AIResult = { content: string; error: string | null };
+
+async function callGemini(system: string, user: string, key: string): Promise<AIResult> {
   try {
-    const res = await fetch(GATEWAY, {
+    const res = await fetch(GEMINI_URL(GEMINI_MODEL), {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify({
-        model: MODEL,
+        systemInstruction: { role: "system", parts: [{ text: system }] },
+        contents: [{ role: "user", parts: [{ text: user }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+      }),
+    });
+    if (res.status === 429) return { content: "I'm getting a lot of questions right now. Please retry in a few seconds.", error: "rate_limited" };
+    if (!res.ok) {
+      const txt = await res.text();
+      return { content: "I couldn't reach the mentor service.", error: `gemini_${res.status}: ${txt.slice(0, 140)}` };
+    }
+    const json = await res.json();
+    const content =
+      json?.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text ?? "").join("") ||
+      "No response.";
+    return { content, error: null };
+  } catch (e) {
+    return { content: "Mentor service unreachable.", error: String(e) };
+  }
+}
+
+async function callLovable(system: string, user: string, key: string): Promise<AIResult> {
+  try {
+    const res = await fetch(LOVABLE_GATEWAY, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: LOVABLE_MODEL,
         messages: [
           { role: "system", content: system },
           { role: "user", content: user },
         ],
       }),
     });
-    if (res.status === 429) return { content: "I'm getting a lot of questions right now. Please retry in a few seconds.", error: "rate_limited" as const };
-    if (res.status === 402) return { content: "AI credits are exhausted. Please add credits in workspace settings.", error: "credits" as const };
+    if (res.status === 429) return { content: "I'm getting a lot of questions right now. Please retry in a few seconds.", error: "rate_limited" };
+    if (res.status === 402) return { content: "AI credits are exhausted. Please add credits in workspace settings.", error: "credits" };
     if (!res.ok) {
       const txt = await res.text();
       return { content: "I couldn't reach the mentor service.", error: `upstream_${res.status}: ${txt.slice(0, 140)}` };
     }
     const json = await res.json();
     const content = json?.choices?.[0]?.message?.content ?? "No response.";
-    return { content, error: null as null };
+    return { content, error: null };
   } catch (e) {
     return { content: "Mentor service unreachable.", error: String(e) };
   }
+}
+
+async function callGateway(system: string, user: string): Promise<AIResult> {
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (geminiKey) return callGemini(system, user, geminiKey);
+  const lovableKey = process.env.LOVABLE_API_KEY;
+  if (lovableKey) return callLovable(system, user, lovableKey);
+  return { content: "AI mentor is temporarily unavailable. Please try again shortly.", error: "missing_key" };
 }
 
 /* ============ Stock explainer (existing) ============ */
