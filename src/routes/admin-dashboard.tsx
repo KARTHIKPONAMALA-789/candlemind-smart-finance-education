@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 type Tab = "overview" | "students" | "tutors" | "attendance" | "broadcasts" | "analytics" | "settings";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin-dashboard")({
   head: () => ({ meta: [{ title: "Admin Console — CandleMind" }] }),
   validateSearch: (s: Record<string, unknown>) => ({ tab: (s.tab as Tab) ?? "overview" }),
   component: Admin,
@@ -29,12 +29,12 @@ const tabs: { id: Tab; label: string; icon: typeof Users }[] = [
 ];
 
 function Admin() {
-  const { tab } = useSearch({ from: "/admin" });
+  const { tab } = useSearch({ from: "/admin-dashboard" });
   return (
     <AppShell title="Admin Console" subtitle="Platform · Operations · Learning analytics">
       <div className="flex gap-1 overflow-x-auto pb-2 mb-5 border-b border-border">
         {tabs.map((t) => (
-          <a key={t.id} href={`/admin?tab=${t.id}`}
+          <a key={t.id} href={`/admin-dashboard?tab=${t.id}`}
             className={`px-3 py-2 text-sm rounded-lg whitespace-nowrap transition relative inline-flex items-center gap-1.5 ${tab === t.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
             <t.icon className="size-3.5" /> {t.label}
             {tab === t.id && <motion.div layoutId="admin-tab" className="absolute bottom-[-9px] left-0 right-0 h-0.5 bg-[image:var(--gradient-primary)]" />}

@@ -13,7 +13,7 @@ import {
   RadialBarChart, RadialBar, BarChart, Bar,
 } from "recharts";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/student-dashboard")({
   head: () => ({ meta: [{ title: "Student Dashboard — CandleMind" }] }),
   component: Dashboard,
 });
