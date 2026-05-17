@@ -161,6 +161,14 @@
     background-clip: text;
     color: transparent;
   }
+  .gradient-bull { background: var(--gradient-bull); color: #fff; }
+  .gradient-bear { background: var(--gradient-bear); color: #fff; }
+  .gradient-trading { background: var(--gradient-trading); color: #fff; }
+  .text-bull { color: #00C853; }
+  .text-bear { color: #D50000; }
+  /* Responsive helpers — keep wide tables/charts scrollable on small screens */
+  .responsive-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .container-safe { width: 100%; max-width: 100%; overflow-x: hidden; }
   .gradient-border {
     position: relative;
   }
