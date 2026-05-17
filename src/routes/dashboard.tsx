@@ -47,11 +47,11 @@ function Dashboard() {
   const firstName = data?.profile?.full_name?.split(" ")[0] ?? "there";
 
   return (
-    <AppShell title="Good morning, Alex 👋" subtitle="You're on a 42-day streak. Let's keep it going.">
+    <AppShell title={`Good morning, ${firstName} 👋`} subtitle={`You're on a ${streak}-day streak. Let's keep it going.`}>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Zap} label="XP this week" value={<span className="gradient-text">2,840</span>} delta="+18% vs last" />
-        <StatCard icon={Flame} label="Learning streak" value="42 days" delta="Top 3%" />
-        <StatCard icon={Trophy} label="Mastery score" value="87%" delta="+4 pts" />
+        <StatCard icon={Zap} label="XP this week" value={<span className="gradient-text">{xp.toLocaleString()}</span>} delta="+18% vs last" />
+        <StatCard icon={Flame} label="Learning streak" value={`${streak} days`} delta="Top 3%" />
+        <StatCard icon={Trophy} label="Mastery score" value={`${mastery}%`} delta="+4 pts" />
         <StatCard icon={Wallet} label="Paper P/L" value={<span className={pnl >= 0 ? "text-primary" : "text-destructive"}>${pnl.toFixed(0)}</span>} delta={`Port. $${portfolio.toFixed(0)}`} />
       </div>
 
