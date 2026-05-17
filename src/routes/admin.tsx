@@ -250,12 +250,20 @@ function AttendanceTab() {
 }
 
 function BroadcastsTab() {
+  const { data } = useAdminData();
+  const items = data?.broadcasts.length
+    ? data.broadcasts.map((b: any) => ({
+        id: b.id, tutor: b.tutor_id.slice(0, 6), avatar: b.tutor_id[0]?.toUpperCase() ?? "T",
+        type: b.priority, title: b.title, body: b.message, when: new Date(b.created_at).toLocaleString(),
+      }))
+    : mockBroadcasts;
   return (
     <div className="space-y-3">
       <div className="glass-strong rounded-2xl p-4 text-sm">
         Moderate tutor-posted broadcasts. Pin important updates so they surface to every student.
       </div>
-      {broadcasts.map((b) => (
+      {items.length === 0 && <div className="glass rounded-2xl p-8 text-center text-sm text-muted-foreground">No broadcasts yet.</div>}
+      {items.map((b) => (
         <div key={b.id} className="glass rounded-2xl p-4 flex items-start gap-3">
           <div className="size-10 rounded-xl bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground text-sm font-semibold">{b.avatar}</div>
           <div className="flex-1 min-w-0">
