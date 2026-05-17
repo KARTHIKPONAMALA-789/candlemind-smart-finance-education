@@ -12,7 +12,6 @@ export const studentNav: NavItem[] = [
   { to: "/paper-trading", label: "Paper Trading", icon: Wallet },
   { to: "/quiz", label: "Quizzes", icon: Brain },
   { to: "/screener", label: "Screener", icon: LineChart },
-  { to: "/broadcasts", label: "Broadcasts", icon: Megaphone },
   { to: "/tutor", label: "AI Mentor", icon: Bot },
   { to: "/psychology", label: "Psychology Coach", icon: HeartPulse },
   { to: "/referrals", label: "Referrals", icon: Users },
