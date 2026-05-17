@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { Flame, Trophy, Zap, BookOpen, Bot, ArrowRight, Sparkles, Activity, Wallet, Megaphone } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { useAuth } from "@/hooks/use-auth";
+import { fetchStudentOverview } from "@/lib/dashboard-queries";
 import { learningSeries } from "@/lib/mock-data";
-import { learningModules, consistencyWeek, paperHoldings, broadcasts } from "@/lib/learning-data";
+import { learningModules, consistencyWeek, paperHoldings as mockHoldings, broadcasts as mockBroadcasts } from "@/lib/learning-data";
 import {
   AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid,
   RadialBarChart, RadialBar, BarChart, Bar,
