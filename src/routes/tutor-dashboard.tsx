@@ -210,15 +210,15 @@ const YOUTUBE_VIMEO = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com
 function UploadTab() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef(null as HTMLInputElement | null);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [level, setLevel] = useState<typeof LEVELS[number] | "">("");
+  const [level, setLevel] = useState("" as typeof LEVELS[number] | "");
   const [duration, setDuration] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
   const [lessonPlan, setLessonPlan] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState([] as File[]);
   const [dragging, setDragging] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
