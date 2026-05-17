@@ -1,12 +1,16 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, Users, DollarSign, TrendingUp, Plus, Star, Eye, Upload, Radio, CalendarClock, BarChart3, Send } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { useAuth } from "@/hooks/use-auth";
+import { fetchTutorOverview, postBroadcast } from "@/lib/dashboard-queries";
+import { supabase } from "@/integrations/supabase/client";
 import { adminCoursePerf, adminRevenue, courses } from "@/lib/mock-data";
-import { liveClasses, broadcasts as initialBroadcasts, type Broadcast } from "@/lib/learning-data";
+import { liveClasses as mockLiveClasses, broadcasts as initialBroadcasts, type Broadcast } from "@/lib/learning-data";
 import { AreaChart, Area, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { toast } from "sonner";
 
