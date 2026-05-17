@@ -159,7 +159,7 @@ function PsychologyCoach() {
               Analyse my behaviour
             </button>
             {insights && (
-              <div className="mt-3 prose prose-sm prose-invert max-w-none prose-headings:mt-2 prose-headings:mb-1 prose-headings:text-foreground prose-p:my-1 prose-ul:my-1">
+              <div className="mt-3 ai-md text-xs leading-relaxed space-y-2 [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:mt-2 [&_h3]:mb-1 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-0.5 [&_strong]:font-semibold">
                 <ReactMarkdown>{insights}</ReactMarkdown>
               </div>
             )}
