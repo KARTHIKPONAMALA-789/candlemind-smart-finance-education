@@ -204,17 +204,6 @@ function CoursesTab() {
   );
 }
 
-function UploadTab() {
-  return (
-    <form onSubmit={(e) => { e.preventDefault(); toast.success("Course saved as draft"); }} className="grid lg:grid-cols-3 gap-4">
-      <div className="lg:col-span-2 glass rounded-2xl p-6 space-y-4">
-        <div className="flex items-center gap-2 text-sm font-medium"><Upload className="size-4 text-primary" /> New course</div>
-        <Field label="Course title" placeholder="e.g. Mastering Candlestick Patterns" />
-        <Field label="Short description" placeholder="One-line summary" />
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="Level" placeholder="Beginner / Intermediate / Advanced" />
-          <Field label="Estimated duration" placeholder="e.g. 4h" />
-        </div>
 const LEVELS = ["Beginner", "Intermediate", "Advanced"] as const;
 const YOUTUBE_VIMEO = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\/.+/i;
 
