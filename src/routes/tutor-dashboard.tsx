@@ -372,22 +372,39 @@ function Progress({ value }: { value: number }) {
 }
 
 function BroadcastTab() {
-  const [posts, setPosts] = useState<Broadcast[]>(initialBroadcasts);
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const { data } = useTutorData();
+  const dbPosts = data?.broadcasts ?? [];
+  const posts: Broadcast[] = dbPosts.length
+    ? dbPosts.map((b: any) => ({
+        id: b.id, tutor: "You", avatar: "Y",
+        type: (b.priority === "high" ? "deadline" : "announcement") as Broadcast["type"],
+        title: b.title, body: b.message, when: new Date(b.created_at).toLocaleString(),
+      }))
+    : initialBroadcasts;
+
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [type, setType] = useState<Broadcast["type"]>("announcement");
+  const [priority, setPriority] = useState("normal");
 
-  const post = (e: React.FormEvent) => {
+  const post = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    setPosts([{ id: `n${Date.now()}`, tutor: "You", avatar: "Y", type, title, body, when: "just now" }, ...posts]);
-    setTitle(""); setBody("");
-    toast.success("Broadcast sent to your students");
+    if (!title.trim() || !user) return;
+    try {
+      await postBroadcast({ tutor_id: user.id, title, message: body, priority });
+      setTitle(""); setBody("");
+      toast.success("Broadcast sent to your students");
+      qc.invalidateQueries({ queryKey: ["tutor-dashboard"] });
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to send");
+    }
   };
 
   return (
     <div className="grid lg:grid-cols-[1fr_360px] gap-4">
       <div className="space-y-3">
+        {posts.length === 0 && <div className="glass rounded-2xl p-8 text-center text-sm text-muted-foreground">No broadcasts yet.</div>}
         {posts.map((b) => (
           <motion.div key={b.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-2xl p-4">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
@@ -401,11 +418,10 @@ function BroadcastTab() {
       </div>
       <form onSubmit={post} className="glass-strong rounded-2xl p-5 space-y-3 h-fit sticky top-20">
         <div className="flex items-center gap-2 text-sm font-medium"><Radio className="size-4 text-accent" /> New broadcast</div>
-        <select value={type} onChange={(e) => setType(e.target.value as Broadcast["type"])} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none">
-          <option value="announcement">Announcement</option>
-          <option value="deadline">Deadline</option>
-          <option value="live">Live class</option>
-          <option value="market">Market update</option>
+        <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none">
+          <option value="normal">Normal</option>
+          <option value="high">High priority</option>
+          <option value="low">Low</option>
         </select>
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
         <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={4} placeholder="Write your message..." className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
