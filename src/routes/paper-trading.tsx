@@ -13,9 +13,12 @@ export const Route = createFileRoute("/paper-trading")({
   component: PaperTrading,
 });
 
+const inr = (n: number) => "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+const inr2 = (n: number) => "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 function PaperTrading() {
   const [holdings, setHoldings] = useState(paperHoldings);
-  const [cash, setCash] = useState(10000);
+  const [cash, setCash] = useState(100000);
   const [selected, setSelected] = useState(stocks[0].ticker);
 
   const portfolioValue = useMemo(() => holdings.reduce((s, h) => s + h.last * h.qty, 0), [holdings]);
@@ -42,11 +45,11 @@ function PaperTrading() {
   };
 
   return (
-    <AppShell title="Paper Trading Simulator" subtitle="Practice with virtual capital — zero risk, real prices">
+    <AppShell title="Paper Trading Simulator" subtitle="Practice on NSE stocks with ₹1,00,000 virtual capital — zero risk, real prices">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Wallet} label="Portfolio value" value={<span className="gradient-text">${portfolioValue.toFixed(0)}</span>} delta="+8.4% all-time" />
-        <StatCard icon={TrendingUp} label="Total P/L" value={<span className={totalPL >= 0 ? "text-primary" : "text-destructive"}>{totalPL >= 0 ? "+" : ""}${totalPL.toFixed(2)}</span>} />
-        <StatCard icon={TrendingDown} label="Cash balance" value={`$${cash.toFixed(0)}`} />
+        <StatCard icon={Wallet} label="Portfolio value" value={<span className="gradient-text">{inr(portfolioValue)}</span>} delta="+8.4% all-time" />
+        <StatCard icon={TrendingUp} label="Total P/L" value={<span className={totalPL >= 0 ? "text-primary" : "text-destructive"}>{totalPL >= 0 ? "+" : ""}{inr2(totalPL)}</span>} />
+        <StatCard icon={TrendingDown} label="Cash balance" value={inr(cash)} />
         <StatCard icon={Wallet} label="Open positions" value={String(holdings.length)} />
       </div>
 
@@ -82,7 +85,7 @@ function PaperTrading() {
               <span className="font-mono font-medium">{stock.ticker}</span>
               <span className={`text-sm font-medium ${stock.change >= 0 ? "text-primary" : "text-destructive"}`}>{stock.change >= 0 ? "+" : ""}{stock.change}%</span>
             </div>
-            <div className="text-2xl font-display font-bold mt-1">${stock.price.toFixed(2)}</div>
+            <div className="text-2xl font-display font-bold mt-1">{inr2(stock.price)}</div>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <button onClick={() => trade("buy")} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">
@@ -112,10 +115,10 @@ function PaperTrading() {
                   <tr key={h.ticker} className="border-b border-border last:border-none hover:bg-foreground/5 transition">
                     <td className="py-3 font-mono font-medium">{h.ticker}</td>
                     <td>{h.qty}</td>
-                    <td className="text-muted-foreground">${h.avg.toFixed(2)}</td>
-                    <td>${h.last.toFixed(2)}</td>
-                    <td>${(h.last * h.qty).toFixed(2)}</td>
-                    <td className={`text-right font-medium ${pl >= 0 ? "text-primary" : "text-destructive"}`}>{pl >= 0 ? "+" : ""}${pl.toFixed(2)}</td>
+                    <td className="text-muted-foreground">{inr2(h.avg)}</td>
+                    <td>{inr2(h.last)}</td>
+                    <td>{inr2(h.last * h.qty)}</td>
+                    <td className={`text-right font-medium ${pl >= 0 ? "text-primary" : "text-destructive"}`}>{pl >= 0 ? "+" : ""}{inr2(pl)}</td>
                   </tr>
                 );
               })}

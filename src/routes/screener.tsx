@@ -5,9 +5,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { Search, SlidersHorizontal, TrendingUp, TrendingDown, Star, Sparkles, X, Loader2, BarChart3, Flame } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
-import { stocks, sectors, type Stock } from "@/lib/mock-data";
+import { stocks, sectors, indices, type Stock } from "@/lib/mock-data";
 import { ResponsiveContainer, LineChart, Line, Tooltip, AreaChart, Area } from "recharts";
 import { explainStock } from "@/lib/stock-ai.functions";
+
+const inr = (n: number) => "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export const Route = createFileRoute("/screener")({
   head: () => ({
@@ -28,12 +30,12 @@ const spark = (seed: number, trend: number) =>
   }));
 
 type CapBucket = "Mega" | "Large" | "Mid" | "Small";
+// mcap is "<n>L Cr" (lakh-crore). Mega >5, Large 2-5, Mid 0.5-2, Small <0.5.
 const capOf = (m: string): CapBucket => {
-  if (m.endsWith("T")) return "Mega";
   const n = parseFloat(m);
-  if (n >= 200) return "Mega";
-  if (n >= 10) return "Large";
-  if (n >= 2) return "Mid";
+  if (n >= 5) return "Mega";
+  if (n >= 2) return "Large";
+  if (n >= 0.5) return "Mid";
   return "Small";
 };
 const volOf = (v: string) => parseFloat(v);
@@ -44,7 +46,7 @@ function PublicScreener() {
   const [maxPE, setMaxPE] = useState(200);
   const [minVol, setMinVol] = useState(0);
   const [caps, setCaps] = useState<Record<CapBucket, boolean>>({ Mega: true, Large: true, Mid: true, Small: true });
-  const [watchlist, setWatchlist] = useState<Set<string>>(new Set(["NVDA", "AAPL"]));
+  const [watchlist, setWatchlist] = useState<Set<string>>(new Set(["RELIANCE", "TCS"]));
   const [selected, setSelected] = useState<Stock | null>(null);
 
   const filtered = useMemo(
@@ -79,15 +81,30 @@ function PublicScreener() {
           className="text-center max-w-3xl mx-auto mb-10"
         >
           <div className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">
-            <Sparkles className="size-3 text-primary" /> Free · No login required
+            <Sparkles className="size-3 text-primary" /> Free · NSE & BSE · No login required
           </div>
           <h1 className="font-display text-4xl lg:text-5xl font-semibold tracking-tight">
-            Public Stock <span className="bg-[image:var(--gradient-primary)] bg-clip-text text-transparent">Screener</span>
+            Indian Stock <span className="bg-[image:var(--gradient-primary)] bg-clip-text text-transparent">Screener</span>
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Filter 10,000+ tickers by sector, P/E, market cap and volume. Click any stock for an AI-powered beginner explanation.
+            Filter NSE & BSE stocks by sector, P/E, market cap and volume. Click any stock for an AI-powered beginner explanation in plain English.
           </p>
         </motion.div>
+
+        {/* Indices strip */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
+          {indices.map((idx) => (
+            <div key={idx.name} className="glass rounded-xl px-3 py-2.5">
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{idx.name}</div>
+              <div className="flex items-baseline justify-between mt-0.5">
+                <span className="font-mono font-semibold text-sm">{idx.value.toLocaleString("en-IN")}</span>
+                <span className={`text-xs font-mono ${idx.change >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                  {idx.change >= 0 ? "+" : ""}{idx.change.toFixed(2)}%
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Top widgets */}
         <div className="grid md:grid-cols-3 gap-4 mb-6">
@@ -102,7 +119,7 @@ function PublicScreener() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by ticker or company name (e.g. AAPL, Tesla)…"
+            placeholder="Search by NSE ticker or name (e.g. RELIANCE, Infosys)…"
             className="bg-transparent outline-none flex-1 text-sm py-1.5"
           />
           <span className="text-xs text-muted-foreground pr-3">{filtered.length} results</span>
@@ -164,10 +181,10 @@ function PublicScreener() {
                       onChange={(e) => setCaps((c) => ({ ...c, [m]: e.target.checked }))}
                     />
                     <span className="text-muted-foreground">
-                      {m === "Mega" && "Mega (>$200B)"}
-                      {m === "Large" && "Large ($10–200B)"}
-                      {m === "Mid" && "Mid ($2–10B)"}
-                      {m === "Small" && "Small (<$2B)"}
+                      {m === "Mega"  && "Mega (>₹5L Cr)"}
+                      {m === "Large" && "Large (₹2–5L Cr)"}
+                      {m === "Mid"   && "Mid (₹50K Cr–2L Cr)"}
+                      {m === "Small" && "Small (<₹50K Cr)"}
                     </span>
                   </label>
                 ))}
@@ -214,7 +231,7 @@ function PublicScreener() {
                             <div className="text-xs text-muted-foreground truncate max-w-[160px]">{s.name}</div>
                           </td>
                           <td className="py-3 px-4 text-xs text-muted-foreground">{s.sector}</td>
-                          <td className="py-3 px-4 text-right font-mono">${s.price.toFixed(2)}</td>
+                          <td className="py-3 px-4 text-right font-mono">{inr(s.price)}</td>
                           <td className={`py-3 px-4 text-right font-mono ${s.change >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                             {s.change >= 0 ? "+" : ""}{s.change.toFixed(2)}%
                           </td>
@@ -341,7 +358,7 @@ function StockModal({ stock, onClose }: { stock: Stock; onClose: () => void }) {
 
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-4 gap-3 text-center">
-            <Stat label="Price" value={`$${stock.price.toFixed(2)}`} />
+            <Stat label="Price" value={inr(stock.price)} />
             <Stat label="P/E" value={stock.pe.toFixed(1)} />
             <Stat label="Mkt Cap" value={stock.mcap} />
             <Stat label="Volume" value={stock.volume} />

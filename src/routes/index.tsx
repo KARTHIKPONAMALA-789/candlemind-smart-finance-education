@@ -298,7 +298,7 @@ function Landing() {
                 )}
                 <div className="text-sm text-muted-foreground">{p.name}</div>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-4xl font-display font-semibold">${p.price}</span>
+                  <span className="text-4xl font-display font-semibold">₹{p.price.toLocaleString("en-IN")}</span>
                   <span className="text-sm text-muted-foreground">/ {p.period}</span>
                 </div>
                 <ul className="mt-6 space-y-2.5 text-sm">

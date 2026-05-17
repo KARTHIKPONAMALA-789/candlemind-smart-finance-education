@@ -289,7 +289,7 @@ function AnalyticsTab() {
         <StatCard icon={Activity} label="Active learners (DAU)" value="4,820" delta="+12%" />
         <StatCard icon={BookOpen} label="Lessons completed" value="284,120" delta="+8.4%" />
         <StatCard icon={GraduationCap} label="Avg quiz score" value="84%" delta="+2pts" />
-        <StatCard icon={DollarSign} label="Referral sales" value="$8.2K" delta="+18%" />
+        <StatCard icon={DollarSign} label="Referral sales" value="₹8.2L" delta="+18%" />
       </div>
       <div className="mt-6 grid lg:grid-cols-2 gap-4">
         <div className="glass rounded-2xl p-5">

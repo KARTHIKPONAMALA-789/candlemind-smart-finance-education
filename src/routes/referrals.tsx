@@ -26,11 +26,11 @@ function Referrals() {
   };
 
   return (
-    <AppShell title="Referrals" subtitle="Earn $20 for every friend who upgrades to Pro">
+    <AppShell title="Referrals" subtitle="Earn ₹500 for every friend who upgrades to Pro">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={MousePointerClick} label="Total clicks" value="1,842" delta="+12.4%" />
         <StatCard icon={Users} label="Sign-ups" value="284" delta="+8.2%" />
-        <StatCard icon={DollarSign} label="Earned" value={<span className="gradient-text">$560</span>} delta="+$80 this week" />
+        <StatCard icon={DollarSign} label="Earned" value={<span className="gradient-text">₹5,600</span>} delta="+₹800 this week" />
         <StatCard icon={Crown} label="Rank" value="#4" delta="Top 1%" />
       </div>
 
@@ -120,7 +120,7 @@ function Referrals() {
                   <div className="text-sm font-medium truncate">{l.name}</div>
                   <div className="text-xs text-muted-foreground">{l.refs} referrals</div>
                 </div>
-                <div className="text-sm font-mono text-primary">${l.earned}</div>
+                <div className="text-sm font-mono text-primary">₹{l.earned.toLocaleString("en-IN")}</div>
               </div>
             ))}
           </div>
