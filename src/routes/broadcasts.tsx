@@ -2,14 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Megaphone, Pin, Radio, CalendarClock, TrendingUp, Bell } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { broadcasts, liveClasses } from "@/lib/learning-data";
 
 const iconFor = (t: string) => t === "live" ? Radio : t === "deadline" ? CalendarClock : t === "market" ? TrendingUp : Megaphone;
 
 export const Route = createFileRoute("/broadcasts")({
   head: () => ({ meta: [{ title: "Broadcasts — CandleMind" }] }),
-  component: () => <RoleGuard allow={["student"]}><BroadcastsPage /></RoleGuard>,
+  component: BroadcastsPage,
 });
 
 function BroadcastsPage() {
