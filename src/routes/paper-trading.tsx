@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { Wallet, TrendingUp, TrendingDown, Plus, Minus } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { StatCard } from "@/components/app/StatCard";
 import { paperHoldings, paperEquityCurve } from "@/lib/learning-data";
 import { stocks } from "@/lib/mock-data";
@@ -11,7 +10,7 @@ import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianG
 
 export const Route = createFileRoute("/paper-trading")({
   head: () => ({ meta: [{ title: "Paper Trading — CandleMind" }] }),
-  component: () => <RoleGuard allow={["student"]}><PaperTrading /></RoleGuard>,
+  component: PaperTrading,
 });
 
 function PaperTrading() {

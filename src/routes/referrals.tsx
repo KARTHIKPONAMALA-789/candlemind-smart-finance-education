@@ -1,4 +1,3 @@
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -12,7 +11,7 @@ import {
 
 export const Route = createFileRoute("/referrals")({
   head: () => ({ meta: [{ title: "Referrals — CandleMind" }] }),
-  component: () => <RoleGuard allow={["student"]}><Referrals /></RoleGuard>,
+  component: Referrals,
 });
 
 function Referrals() {

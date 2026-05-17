@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Users, DollarSign, BookOpen, Activity, TrendingUp, Sparkles, MoreHorizontal, GraduationCap, CalendarClock, Megaphone, BarChart3, Shield, CheckCircle2, XCircle, Pin } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { fetchAdminOverview } from "@/lib/dashboard-queries";
 import { adminRevenue, adminCoursePerf, adminStudents } from "@/lib/mock-data";
 import { tutorsList, attendanceHeatmap, broadcasts as mockBroadcasts } from "@/lib/learning-data";
@@ -16,7 +15,7 @@ type Tab = "overview" | "students" | "tutors" | "attendance" | "broadcasts" | "a
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Console — CandleMind" }] }),
   validateSearch: (s: Record<string, unknown>) => ({ tab: (s.tab as Tab) ?? "overview" }),
-  component: () => <RoleGuard allow={["admin"]}><Admin /></RoleGuard>,
+  component: Admin,
 });
 
 const tabs: { id: Tab; label: string; icon: typeof Users }[] = [

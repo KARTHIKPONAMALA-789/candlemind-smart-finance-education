@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Flame, Trophy, Zap, BookOpen, Bot, ArrowRight, Sparkles, Activity, Wallet, Megaphone } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchStudentOverview } from "@/lib/dashboard-queries";
 import { learningSeries } from "@/lib/mock-data";
@@ -16,7 +15,7 @@ import {
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({ meta: [{ title: "Student Dashboard — CandleMind" }] }),
-  component: () => <RoleGuard allow={["student"]}><Dashboard /></RoleGuard>,
+  component: Dashboard,
 });
 
 function Dashboard() {

@@ -1,4 +1,3 @@
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -8,7 +7,7 @@ import { courses } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/courses")({
   head: () => ({ meta: [{ title: "Courses — CandleMind" }] }),
-  component: () => <RoleGuard allow={["student"]}><Courses /></RoleGuard>,
+  component: Courses,
 });
 
 const cats = ["All", "Technical", "Fundamental", "Strategy", "Advanced"];

@@ -8,9 +8,9 @@ export const Route = createFileRoute("/auth")({
 });
 
 const roles = [
-  { id: "student", label: "Student", desc: "Learn the markets with AI tutor, courses, XP & quizzes.", icon: GraduationCap, color: "from-emerald-400 to-cyan-400" },
-  { id: "tutor", label: "Tutor", desc: "Create courses, track learners and grow your audience.", icon: Briefcase, color: "from-cyan-400 to-blue-500" },
-  { id: "admin", label: "Admin", desc: "Manage the platform, revenue, users and analytics.", icon: Shield, color: "from-violet-500 to-fuchsia-500" },
+  { id: "student", label: "Student", desc: "Learn the markets with AI tutor, courses, XP & quizzes.", icon: GraduationCap, color: "from-emerald-400 to-cyan-400", to: "/dashboard" },
+  { id: "tutor", label: "Tutor", desc: "Create courses, track learners and grow your audience.", icon: Briefcase, color: "from-cyan-400 to-blue-500", to: "/tutor-dashboard" },
+  { id: "admin", label: "Admin", desc: "Manage the platform, revenue, users and analytics.", icon: Shield, color: "from-violet-500 to-fuchsia-500", to: "/admin" },
 ] as const;
 
 function RoleChooser() {
@@ -56,16 +56,16 @@ function RoleChooser() {
               <p className="text-sm text-muted-foreground mt-1 min-h-[3rem]">{r.desc}</p>
               <div className="mt-5 flex gap-2">
                 <Link
-                  to="/auth/$role/login" params={{ role: r.id }}
+                  to={r.to}
                   className="flex-1 text-center py-2 rounded-lg glass hover:bg-foreground/10 text-sm transition"
                 >
                   Sign in
                 </Link>
                 <Link
-                  to="/auth/$role/register" params={{ role: r.id }}
+                  to={r.to}
                   className="flex-1 inline-flex items-center justify-center gap-1 py-2 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
                 >
-                  Register <ArrowRight className="size-3.5" />
+                  Enter <ArrowRight className="size-3.5" />
                 </Link>
               </div>
             </motion.div>

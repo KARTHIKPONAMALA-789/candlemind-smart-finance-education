@@ -5,7 +5,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, Users, DollarSign, TrendingUp, Plus, Star, Eye, Upload, Radio, CalendarClock, BarChart3, Send } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
-import { RoleGuard } from "@/components/auth/RoleGuard";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchTutorOverview, postBroadcast } from "@/lib/dashboard-queries";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,7 +18,7 @@ type Tab = "overview" | "courses" | "upload" | "live" | "students" | "broadcast"
 export const Route = createFileRoute("/tutor-dashboard")({
   head: () => ({ meta: [{ title: "Tutor Studio — CandleMind" }] }),
   validateSearch: (s: Record<string, unknown>) => ({ tab: (s.tab as Tab) ?? "overview" }),
-  component: () => <RoleGuard allow={["tutor"]}><TutorDashboard /></RoleGuard>,
+  component: TutorDashboard,
 });
 
 const myCourses = courses.slice(0, 4).map((c, i) => ({
