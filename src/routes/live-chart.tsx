@@ -21,6 +21,7 @@ import {
   fetchRSI,
   analyzeStockWithAI,
 } from "@/lib/alpha-vantage.functions";
+import { CompanyNews } from "@/components/site/CompanyNews";
 
 export const Route = createFileRoute("/live-chart")({
   head: () => ({
@@ -292,6 +293,8 @@ function LiveChartPage() {
                 </p>
               ) : null}
             </div>
+
+            <CompanyNews symbol={meta.symbol} />
           </>
         )}
 

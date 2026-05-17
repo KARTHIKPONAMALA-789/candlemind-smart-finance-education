@@ -7,6 +7,7 @@ import {
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Counter } from "@/components/site/Counter";
+import { MarketNews } from "@/components/site/MarketNews";
 import { features, stats, testimonials, pricing, learningSeries } from "@/lib/mock-data";
 import {
   AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid,
@@ -240,6 +241,8 @@ function Landing() {
           </div>
         </div>
       </section>
+
+      <MarketNews />
 
       {/* TESTIMONIALS */}
       <section className="px-6 mt-32">
