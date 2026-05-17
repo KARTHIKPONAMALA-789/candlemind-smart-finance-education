@@ -17,11 +17,13 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
     : role ?? "student";
   const effectiveRole = role ?? inferredRole;
   const nav = navForRole(effectiveRole);
+  const showSidebar = role === "student" && !!user;
   const roleLabel = effectiveRole ? effectiveRole.charAt(0).toUpperCase() + effectiveRole.slice(1) : "Guest";
   const displayName = (user?.user_metadata?.full_name as string) ?? user?.email?.split("@")[0] ?? "Learner";
 
   return (
     <div className="min-h-screen flex">
+      {showSidebar && (
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/60 backdrop-blur-xl">
         <Link to="/" className="flex items-center gap-2 px-5 h-16 border-b border-border">
           <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
@@ -76,6 +78,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
           </button>
         </div>
       </aside>
+      )}
 
       <div className="flex-1 min-w-0">
         <header className="h-16 border-b border-border px-4 lg:px-8 flex items-center justify-between bg-background/40 backdrop-blur-xl sticky top-0 z-30">
