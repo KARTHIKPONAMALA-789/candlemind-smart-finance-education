@@ -1,11 +1,13 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { Users, DollarSign, BookOpen, Activity, TrendingUp, Sparkles, MoreHorizontal, GraduationCap, CalendarClock, Megaphone, BarChart3, Shield, CheckCircle2, XCircle, Pin } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { fetchAdminOverview } from "@/lib/dashboard-queries";
 import { adminRevenue, adminCoursePerf, adminStudents } from "@/lib/mock-data";
-import { tutorsList, attendanceHeatmap, broadcasts } from "@/lib/learning-data";
+import { tutorsList, attendanceHeatmap, broadcasts as mockBroadcasts } from "@/lib/learning-data";
 import { AreaChart, Area, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { toast } from "sonner";
 
