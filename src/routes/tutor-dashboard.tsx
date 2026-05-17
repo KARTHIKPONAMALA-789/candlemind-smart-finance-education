@@ -130,50 +130,67 @@ function Overview() {
 }
 
 function CoursesTab() {
+  const { data, isLoading } = useTutorData();
+  const dbCourses = data?.courses ?? [];
+  const rows = dbCourses.length
+    ? dbCourses.map((c: any) => ({
+        id: c.id, title: c.title, lessons: 0, level: c.difficulty,
+        color: "from-blue-500 to-violet-500", students: c.students, rating: 0,
+        revenue: 0, progress: c.progress, published: c.published,
+      }))
+    : [];
+
   return (
     <div className="glass rounded-2xl p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="text-sm font-medium">Your courses</div>
-          <div className="text-xs text-muted-foreground">Performance overview</div>
+          <div className="text-xs text-muted-foreground">{isLoading ? "Loading…" : `${rows.length} course${rows.length === 1 ? "" : "s"}`}</div>
         </div>
         <a href="/tutor-dashboard?tab=upload" className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition">
           <Plus className="size-3.5" /> New course
         </a>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="text-xs text-muted-foreground border-b border-border">
-            <tr><th className="text-left py-2 font-medium">Course</th><th className="text-left font-medium">Students</th><th className="text-left font-medium">Rating</th><th className="text-left font-medium">Revenue</th><th className="text-left font-medium">Progress</th><th className="text-right font-medium">Actions</th></tr>
-          </thead>
-          <tbody>
-            {myCourses.map((c) => (
-              <motion.tr key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border">
-                <td className="py-3 flex items-center gap-3">
-                  <div className={`size-9 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-primary-foreground font-semibold text-xs`}>
-                    <BookOpen className="size-4" />
-                  </div>
-                  <div>
-                    <div className="font-medium">{c.title}</div>
-                    <div className="text-xs text-muted-foreground">{c.lessons} lessons · {c.level}</div>
-                  </div>
-                </td>
-                <td>{c.students.toLocaleString()}</td>
-                <td className="text-primary">{c.rating} ★</td>
-                <td>${c.revenue.toLocaleString()}</td>
-                <td className="w-40">
-                  <div className="h-1.5 rounded-full bg-foreground/5 overflow-hidden">
-                    <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
-                  </div>
-                </td>
-                <td className="text-right text-xs">
-                  <button className="text-primary hover:underline">Edit</button>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {rows.length === 0 ? (
+        <div className="text-center py-12 text-sm text-muted-foreground">
+          You haven't created any courses yet. Click <span className="text-primary">New course</span> to get started.
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="text-xs text-muted-foreground border-b border-border">
+              <tr><th className="text-left py-2 font-medium">Course</th><th className="text-left font-medium">Students</th><th className="text-left font-medium">Status</th><th className="text-left font-medium">Progress</th><th className="text-right font-medium">Actions</th></tr>
+            </thead>
+            <tbody>
+              {rows.map((c) => (
+                <motion.tr key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border">
+                  <td className="py-3 flex items-center gap-3">
+                    <div className={`size-9 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-primary-foreground font-semibold text-xs`}>
+                      <BookOpen className="size-4" />
+                    </div>
+                    <div>
+                      <div className="font-medium">{c.title}</div>
+                      <div className="text-xs text-muted-foreground">{c.level}</div>
+                    </div>
+                  </td>
+                  <td>{c.students.toLocaleString()}</td>
+                  <td>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${c.published ? "bg-primary/15 text-primary" : "bg-warning/15 text-warning"}`}>{c.published ? "Published" : "Draft"}</span>
+                  </td>
+                  <td className="w-40">
+                    <div className="h-1.5 rounded-full bg-foreground/5 overflow-hidden">
+                      <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
+                    </div>
+                  </td>
+                  <td className="text-right text-xs">
+                    <button className="text-primary hover:underline">Edit</button>
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
