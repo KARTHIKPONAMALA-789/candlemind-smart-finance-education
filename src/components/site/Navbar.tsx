@@ -20,7 +20,7 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition">Features</a>
           <Link to="/courses" className="hover:text-foreground transition">Courses</Link>
-          <Link to="/screener" className="hover:text-foreground transition">Screeners</Link>
+          <Link to="/screener" className="hover:text-foreground transition">Screener</Link>
           <Link to="/tutor" className="hover:text-foreground transition">AI Tutor</Link>
           <a href="#pricing" className="hover:text-foreground transition">Pricing</a>
         </nav>

@@ -14,29 +14,348 @@ export type Database = {
   }
   public: {
     Tables: {
-      profiles: {
+      attendance: {
         Row: {
-          avatar_url: string | null
-          created_at: string
-          full_name: string | null
+          attendance_time: string
+          attended: boolean
           id: string
+          live_class_id: string
+          student_id: string
+        }
+        Insert: {
+          attendance_time?: string
+          attended?: boolean
+          id?: string
+          live_class_id: string
+          student_id: string
+        }
+        Update: {
+          attendance_time?: string
+          attended?: boolean
+          id?: string
+          live_class_id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_live_class_id_fkey"
+            columns: ["live_class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broadcasts: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          priority: string
+          title: string
+          tutor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          priority?: string
+          title: string
+          tutor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          priority?: string
+          title?: string
+          tutor_id?: string
+        }
+        Relationships: []
+      }
+      courses: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          difficulty: string
+          id: string
+          published: boolean
+          thumbnail: string | null
+          title: string
+          tutor_id: string
           updated_at: string
         }
         Insert: {
-          avatar_url?: string | null
+          category?: string | null
           created_at?: string
-          full_name?: string | null
-          id: string
+          description?: string | null
+          difficulty?: string
+          id?: string
+          published?: boolean
+          thumbnail?: string | null
+          title: string
+          tutor_id: string
           updated_at?: string
         }
         Update: {
-          avatar_url?: string | null
+          category?: string | null
           created_at?: string
-          full_name?: string | null
+          description?: string | null
+          difficulty?: string
           id?: string
+          published?: boolean
+          thumbnail?: string | null
+          title?: string
+          tutor_id?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      enrollments: {
+        Row: {
+          completed: boolean
+          course_id: string
+          id: string
+          joined_at: string
+          progress_percentage: number
+          student_id: string
+        }
+        Insert: {
+          completed?: boolean
+          course_id: string
+          id?: string
+          joined_at?: string
+          progress_percentage?: number
+          student_id: string
+        }
+        Update: {
+          completed?: boolean
+          course_id?: string
+          id?: string
+          joined_at?: string
+          progress_percentage?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_classes: {
+        Row: {
+          class_title: string
+          created_at: string
+          duration_min: number
+          id: string
+          meeting_link: string | null
+          scheduled_date: string
+          tutor_id: string
+        }
+        Insert: {
+          class_title: string
+          created_at?: string
+          duration_min?: number
+          id?: string
+          meeting_link?: string | null
+          scheduled_date: string
+          tutor_id: string
+        }
+        Update: {
+          class_title?: string
+          created_at?: string
+          duration_min?: number
+          id?: string
+          meeting_link?: string | null
+          scheduled_date?: string
+          tutor_id?: string
+        }
+        Relationships: []
+      }
+      modules: {
+        Row: {
+          course_id: string
+          created_at: string
+          duration_min: number | null
+          id: string
+          order_number: number
+          pdf_url: string | null
+          title: string
+          video_url: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          duration_min?: number | null
+          id?: string
+          order_number?: number
+          pdf_url?: string | null
+          title: string
+          video_url?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          duration_min?: number | null
+          id?: string
+          order_number?: number
+          pdf_url?: string | null
+          title?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paper_trades: {
+        Row: {
+          buy_price: number
+          created_at: string
+          current_price: number
+          id: string
+          profit_loss: number | null
+          quantity: number
+          status: string
+          stock_name: string
+          student_id: string
+          ticker: string
+        }
+        Insert: {
+          buy_price: number
+          created_at?: string
+          current_price: number
+          id?: string
+          profit_loss?: number | null
+          quantity: number
+          status?: string
+          stock_name: string
+          student_id: string
+          ticker: string
+        }
+        Update: {
+          buy_price?: number
+          created_at?: string
+          current_price?: number
+          id?: string
+          profit_loss?: number | null
+          quantity?: number
+          status?: string
+          stock_name?: string
+          student_id?: string
+          ticker?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          consistency_score: number
+          created_at: string
+          full_name: string | null
+          id: string
+          streak: number
+          updated_at: string
+          xp: number
+        }
+        Insert: {
+          avatar_url?: string | null
+          consistency_score?: number
+          created_at?: string
+          full_name?: string | null
+          id: string
+          streak?: number
+          updated_at?: string
+          xp?: number
+        }
+        Update: {
+          avatar_url?: string | null
+          consistency_score?: number
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          streak?: number
+          updated_at?: string
+          xp?: number
+        }
+        Relationships: []
+      }
+      quiz_results: {
+        Row: {
+          completed_at: string
+          id: string
+          quiz_id: string
+          score: number
+          student_id: string
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          quiz_id: string
+          score: number
+          student_id: string
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          quiz_id?: string
+          score?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_results_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          correct_answer: number
+          created_at: string
+          id: string
+          module_id: string
+          options: Json
+          question: string
+        }
+        Insert: {
+          correct_answer: number
+          created_at?: string
+          id?: string
+          module_id: string
+          options: Json
+          question: string
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string
+          id?: string
+          module_id?: string
+          options?: Json
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -55,6 +374,27 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      watchlist: {
+        Row: {
+          created_at: string
+          id: string
+          ticker: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ticker: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ticker?: string
           user_id?: string
         }
         Relationships: []

@@ -54,35 +54,36 @@ export const completionSeries = [
   { name: "Advanced", value: 15 },
 ];
 
-export const stocks = [
-  { ticker: "AAPL", name: "Apple Inc.", price: 224.31, change: 1.24, sector: "Technology", mcap: "3.4T", pe: 32.1 },
-  { ticker: "NVDA", name: "NVIDIA Corp", price: 138.07, change: 3.92, sector: "Semiconductors", mcap: "3.3T", pe: 65.4 },
-  { ticker: "TSLA", name: "Tesla Inc.", price: 251.44, change: -2.11, sector: "Automotive", mcap: "800B", pe: 71.2 },
-  { ticker: "MSFT", name: "Microsoft", price: 421.55, change: 0.62, sector: "Technology", mcap: "3.1T", pe: 36.8 },
-  { ticker: "AMZN", name: "Amazon", price: 188.92, change: 1.87, sector: "E-commerce", mcap: "1.9T", pe: 48.2 },
-  { ticker: "META", name: "Meta Platforms", price: 561.10, change: -0.45, sector: "Technology", mcap: "1.4T", pe: 28.7 },
-  { ticker: "GOOG", name: "Alphabet", price: 178.34, change: 2.04, sector: "Technology", mcap: "2.2T", pe: 26.5 },
-  { ticker: "AMD", name: "Adv. Micro Dev", price: 142.21, change: 4.31, sector: "Semiconductors", mcap: "230B", pe: 192.0 },
+export type Stock = {
+  ticker: string; name: string; price: number; change: number;
+  sector: string; mcap: string; pe: number; volume: string;
+};
+
+export const stocks: Stock[] = [
+  { ticker: "AAPL", name: "Apple Inc.", price: 224.31, change: 1.24, sector: "Technology", mcap: "3.4T", pe: 32.1, volume: "48.2M" },
+  { ticker: "NVDA", name: "NVIDIA Corp", price: 138.07, change: 3.92, sector: "Semiconductors", mcap: "3.3T", pe: 65.4, volume: "182.7M" },
+  { ticker: "TSLA", name: "Tesla Inc.", price: 251.44, change: -2.11, sector: "Automotive", mcap: "800B", pe: 71.2, volume: "94.1M" },
+  { ticker: "MSFT", name: "Microsoft", price: 421.55, change: 0.62, sector: "Technology", mcap: "3.1T", pe: 36.8, volume: "22.4M" },
+  { ticker: "AMZN", name: "Amazon", price: 188.92, change: 1.87, sector: "E-commerce", mcap: "1.9T", pe: 48.2, volume: "38.6M" },
+  { ticker: "META", name: "Meta Platforms", price: 561.10, change: -0.45, sector: "Technology", mcap: "1.4T", pe: 28.7, volume: "14.8M" },
+  { ticker: "GOOG", name: "Alphabet", price: 178.34, change: 2.04, sector: "Technology", mcap: "2.2T", pe: 26.5, volume: "26.1M" },
+  { ticker: "AMD", name: "Adv. Micro Dev", price: 142.21, change: 4.31, sector: "Semiconductors", mcap: "230B", pe: 192.0, volume: "65.3M" },
+  { ticker: "JPM", name: "JPMorgan Chase", price: 218.45, change: 0.88, sector: "Finance", mcap: "620B", pe: 12.4, volume: "9.2M" },
+  { ticker: "XOM", name: "Exxon Mobil", price: 117.23, change: -1.32, sector: "Energy", mcap: "510B", pe: 14.1, volume: "16.7M" },
+  { ticker: "NFLX", name: "Netflix", price: 712.66, change: 2.45, sector: "Technology", mcap: "305B", pe: 47.9, volume: "4.1M" },
+  { ticker: "BRK.B", name: "Berkshire Hathaway", price: 462.10, change: -0.21, sector: "Finance", mcap: "1.0T", pe: 9.6, volume: "3.8M" },
+  { ticker: "V", name: "Visa Inc.", price: 296.78, change: 1.05, sector: "Finance", mcap: "590B", pe: 31.2, volume: "5.7M" },
+  { ticker: "DIS", name: "Walt Disney", price: 102.34, change: -3.18, sector: "Technology", mcap: "186B", pe: 38.6, volume: "11.9M" },
+  { ticker: "CVX", name: "Chevron", price: 158.92, change: -0.92, sector: "Energy", mcap: "295B", pe: 16.4, volume: "8.3M" },
+  { ticker: "SHOP", name: "Shopify", price: 88.41, change: 5.62, sector: "E-commerce", mcap: "112B", pe: 78.3, volume: "22.6M" },
 ];
 
 export const sectors = ["All", "Technology", "Semiconductors", "Automotive", "E-commerce", "Finance", "Energy"];
 
 export const quizzes = [
-  {
-    q: "Which candlestick pattern signals indecision in the market?",
-    a: ["Hammer", "Doji", "Engulfing", "Marubozu"],
-    correct: 1,
-  },
-  {
-    q: "P/E ratio is calculated as:",
-    a: ["Price / Earnings", "Profit / Equity", "Price × Earnings", "Earnings / Price"],
-    correct: 0,
-  },
-  {
-    q: "What does 'support' mean in technical analysis?",
-    a: ["Resistance level", "Price floor where buyers step in", "Trend reversal", "Dividend payout"],
-    correct: 1,
-  },
+  { q: "Which candlestick pattern signals indecision in the market?", a: ["Hammer", "Doji", "Engulfing", "Marubozu"], correct: 1 },
+  { q: "P/E ratio is calculated as:", a: ["Price / Earnings", "Profit / Equity", "Price × Earnings", "Earnings / Price"], correct: 0 },
+  { q: "What does 'support' mean in technical analysis?", a: ["Resistance level", "Price floor where buyers step in", "Trend reversal", "Dividend payout"], correct: 1 },
 ];
 
 export const activity = [
