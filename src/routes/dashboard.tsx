@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { Flame, Trophy, Zap, BookOpen, Bot, ArrowRight, Sparkles, Activity, Wallet, Megaphone } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { useAuth } from "@/hooks/use-auth";
+import { fetchStudentOverview } from "@/lib/dashboard-queries";
 import { learningSeries } from "@/lib/mock-data";
-import { learningModules, consistencyWeek, paperHoldings, broadcasts } from "@/lib/learning-data";
+import { learningModules, consistencyWeek, paperHoldings as mockHoldings, broadcasts as mockBroadcasts } from "@/lib/learning-data";
 import {
   AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid,
   RadialBarChart, RadialBar, BarChart, Bar,
@@ -17,16 +20,38 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
-  const pnl = paperHoldings.reduce((s, h) => s + (h.last - h.avg) * h.qty, 0);
-  const portfolio = paperHoldings.reduce((s, h) => s + h.last * h.qty, 0);
-  const consistency = Math.round(consistencyWeek.reduce((s, d) => s + d.score, 0) / consistencyWeek.length);
+  const { user } = useAuth();
+  const { data } = useQuery({
+    queryKey: ["student-dashboard", user?.id],
+    queryFn: () => fetchStudentOverview(user!.id),
+    enabled: !!user,
+  });
+
+  const paperTrades = data?.paperTrades ?? [];
+  const holdings = paperTrades.length
+    ? paperTrades.map((t: any) => ({ ticker: t.ticker, qty: Number(t.quantity), avg: Number(t.buy_price), last: Number(t.current_price) }))
+    : mockHoldings;
+  const broadcasts = data?.broadcasts.length
+    ? data.broadcasts.map((b: any) => ({
+        id: b.id, type: "announcement" as const, title: b.title, body: b.message,
+        when: new Date(b.created_at).toLocaleDateString(), pinned: b.priority === "high",
+      }))
+    : mockBroadcasts;
+
+  const pnl = holdings.reduce((s, h) => s + (h.last - h.avg) * h.qty, 0);
+  const portfolio = holdings.reduce((s, h) => s + h.last * h.qty, 0);
+  const consistency = data?.profile?.consistency_score || Math.round(consistencyWeek.reduce((s, d) => s + d.score, 0) / consistencyWeek.length);
+  const xp = data?.profile?.xp ?? 2840;
+  const streak = data?.profile?.streak ?? 42;
+  const mastery = data?.avgQuiz ?? 87;
+  const firstName = data?.profile?.full_name?.split(" ")[0] ?? "there";
 
   return (
-    <AppShell title="Good morning, Alex 👋" subtitle="You're on a 42-day streak. Let's keep it going.">
+    <AppShell title={`Good morning, ${firstName} 👋`} subtitle={`You're on a ${streak}-day streak. Let's keep it going.`}>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Zap} label="XP this week" value={<span className="gradient-text">2,840</span>} delta="+18% vs last" />
-        <StatCard icon={Flame} label="Learning streak" value="42 days" delta="Top 3%" />
-        <StatCard icon={Trophy} label="Mastery score" value="87%" delta="+4 pts" />
+        <StatCard icon={Zap} label="XP this week" value={<span className="gradient-text">{xp.toLocaleString()}</span>} delta="+18% vs last" />
+        <StatCard icon={Flame} label="Learning streak" value={`${streak} days`} delta="Top 3%" />
+        <StatCard icon={Trophy} label="Mastery score" value={`${mastery}%`} delta="+4 pts" />
         <StatCard icon={Wallet} label="Paper P/L" value={<span className={pnl >= 0 ? "text-primary" : "text-destructive"}>${pnl.toFixed(0)}</span>} delta={`Port. $${portfolio.toFixed(0)}`} />
       </div>
 
@@ -137,7 +162,7 @@ function Dashboard() {
                 <tr><th className="text-left py-2 font-medium">Stock</th><th className="text-left font-medium">Qty</th><th className="text-left font-medium">Avg</th><th className="text-left font-medium">Last</th><th className="text-right font-medium">P/L</th></tr>
               </thead>
               <tbody>
-                {paperHoldings.map((h) => {
+                {holdings.map((h) => {
                   const pl = (h.last - h.avg) * h.qty;
                   return (
                     <tr key={h.ticker} className="border-b border-border last:border-none">

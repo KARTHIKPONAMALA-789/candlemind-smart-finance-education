@@ -1,11 +1,13 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { Users, DollarSign, BookOpen, Activity, TrendingUp, Sparkles, MoreHorizontal, GraduationCap, CalendarClock, Megaphone, BarChart3, Shield, CheckCircle2, XCircle, Pin } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { fetchAdminOverview } from "@/lib/dashboard-queries";
 import { adminRevenue, adminCoursePerf, adminStudents } from "@/lib/mock-data";
-import { tutorsList, attendanceHeatmap, broadcasts } from "@/lib/learning-data";
+import { tutorsList, attendanceHeatmap, broadcasts as mockBroadcasts } from "@/lib/learning-data";
 import { AreaChart, Area, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { toast } from "sonner";
 
@@ -52,14 +54,20 @@ function Admin() {
   );
 }
 
+function useAdminData() {
+  return useQuery({ queryKey: ["admin-dashboard"], queryFn: fetchAdminOverview });
+}
+
 function Overview() {
+  const { data } = useAdminData();
+  const t = data?.totals;
   return (
     <>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Users} label="Total students" value="12,482" delta="+14.2%" />
-        <StatCard icon={GraduationCap} label="Total tutors" value="48" delta="+3 this month" />
-        <StatCard icon={DollarSign} label="Monthly revenue" value={<span className="gradient-text">$64.9K</span>} delta="+24.8%" />
-        <StatCard icon={BookOpen} label="Active enrollments" value="32,118" delta="+8.4%" />
+        <StatCard icon={Users} label="Total students" value={(t?.students ?? 0).toLocaleString()} delta="live" />
+        <StatCard icon={GraduationCap} label="Total tutors" value={(t?.tutors ?? 0).toLocaleString()} delta="live" />
+        <StatCard icon={BookOpen} label="Courses" value={(t?.courses ?? 0).toLocaleString()} delta={`${t?.enrollments ?? 0} enrollments`} />
+        <StatCard icon={CalendarClock} label="Live classes" value={(t?.liveClasses ?? 0).toLocaleString()} delta="scheduled" />
       </div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 glass-strong rounded-2xl p-6 relative overflow-hidden">
@@ -122,27 +130,31 @@ function Overview() {
 }
 
 function StudentsTab() {
+  const { data, isLoading } = useAdminData();
+  const rows = data?.students.length
+    ? data.students.map((s) => ({ name: s.name, email: s.id.slice(0, 8) + "…", joined: new Date(s.joined).toLocaleDateString(), course: "—", status: "Active" }))
+    : adminStudents;
   return (
     <div className="glass rounded-2xl overflow-hidden">
       <div className="p-5 border-b border-border flex items-center justify-between">
-        <div><h3 className="font-display font-semibold">Student management</h3><p className="text-xs text-muted-foreground">Monitor learners and track engagement</p></div>
+        <div><h3 className="font-display font-semibold">Student management</h3><p className="text-xs text-muted-foreground">{isLoading ? "Loading…" : `${rows.length} registered`}</p></div>
         <button className="text-xs text-primary hover:underline">Export CSV</button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="text-xs text-muted-foreground">
             <tr className="border-b border-border">
-              <th className="text-left p-4 font-normal">Name</th><th className="text-left p-4 font-normal">Email</th><th className="text-left p-4 font-normal">Joined</th><th className="text-left p-4 font-normal">Course</th><th className="text-left p-4 font-normal">Status</th><th className="p-4"></th>
+              <th className="text-left p-4 font-normal">Name</th><th className="text-left p-4 font-normal">ID</th><th className="text-left p-4 font-normal">Joined</th><th className="text-left p-4 font-normal">Course</th><th className="text-left p-4 font-normal">Status</th><th className="p-4"></th>
             </tr>
           </thead>
           <tbody>
-            {adminStudents.map((s) => (
-              <tr key={s.email} className="border-b border-border hover:bg-foreground/5 transition">
+            {rows.map((s, i) => (
+              <tr key={i} className="border-b border-border hover:bg-foreground/5 transition">
                 <td className="p-4 flex items-center gap-3">
                   <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground text-xs font-semibold">{s.name.charAt(0)}</div>
                   {s.name}
                 </td>
-                <td className="p-4 text-muted-foreground">{s.email}</td>
+                <td className="p-4 text-muted-foreground font-mono text-xs">{s.email}</td>
                 <td className="p-4 text-muted-foreground font-mono text-xs">{s.joined}</td>
                 <td className="p-4">{s.course}</td>
                 <td className="p-4">
@@ -159,26 +171,30 @@ function StudentsTab() {
 }
 
 function TutorsTab() {
+  const { data, isLoading } = useAdminData();
+  const rows = data?.tutors.length
+    ? data.tutors.map((t) => ({ name: t.name, email: t.id.slice(0, 8) + "…", students: t.students, courses: t.courses, rating: 0, status: "Approved" }))
+    : tutorsList;
   return (
     <div className="glass rounded-2xl overflow-hidden">
       <div className="p-5 border-b border-border flex items-center justify-between">
-        <div><h3 className="font-display font-semibold">Tutor management</h3><p className="text-xs text-muted-foreground">Approve, suspend and review tutor performance</p></div>
+        <div><h3 className="font-display font-semibold">Tutor management</h3><p className="text-xs text-muted-foreground">{isLoading ? "Loading…" : `${rows.length} tutors`}</p></div>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="text-xs text-muted-foreground">
             <tr className="border-b border-border">
-              <th className="text-left p-4 font-normal">Tutor</th><th className="text-left p-4 font-normal">Email</th><th className="text-left p-4 font-normal">Students</th><th className="text-left p-4 font-normal">Courses</th><th className="text-left p-4 font-normal">Rating</th><th className="text-left p-4 font-normal">Status</th><th className="text-right p-4 font-normal">Actions</th>
+              <th className="text-left p-4 font-normal">Tutor</th><th className="text-left p-4 font-normal">ID</th><th className="text-left p-4 font-normal">Students</th><th className="text-left p-4 font-normal">Courses</th><th className="text-left p-4 font-normal">Rating</th><th className="text-left p-4 font-normal">Status</th><th className="text-right p-4 font-normal">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {tutorsList.map((t) => (
-              <tr key={t.email} className="border-b border-border last:border-none hover:bg-foreground/5 transition">
+            {rows.map((t, i) => (
+              <tr key={i} className="border-b border-border last:border-none hover:bg-foreground/5 transition">
                 <td className="p-4 flex items-center gap-3">
                   <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground text-xs font-semibold">{t.name.split(" ")[1]?.[0] ?? t.name[0]}</div>
                   {t.name}
                 </td>
-                <td className="p-4 text-muted-foreground">{t.email}</td>
+                <td className="p-4 text-muted-foreground font-mono text-xs">{t.email}</td>
                 <td className="p-4">{t.students.toLocaleString()}</td>
                 <td className="p-4">{t.courses}</td>
                 <td className="p-4 text-primary">{t.rating || "—"} {t.rating ? "★" : ""}</td>
@@ -186,14 +202,7 @@ function TutorsTab() {
                   <span className={`text-xs px-2 py-0.5 rounded-full ${t.status === "Approved" ? "bg-primary/15 text-primary" : "bg-warning/15 text-warning"}`}>{t.status}</span>
                 </td>
                 <td className="p-4 text-right text-xs space-x-2">
-                  {t.status === "Pending" ? (
-                    <>
-                      <button onClick={() => toast.success(`${t.name} approved`)} className="inline-flex items-center gap-1 text-primary hover:underline"><CheckCircle2 className="size-3" /> Approve</button>
-                      <button onClick={() => toast.error(`${t.name} rejected`)} className="inline-flex items-center gap-1 text-destructive hover:underline"><XCircle className="size-3" /> Reject</button>
-                    </>
-                  ) : (
-                    <button onClick={() => toast.message(`${t.name} suspended`)} className="text-muted-foreground hover:text-foreground">Suspend</button>
-                  )}
+                  <button onClick={() => toast.message(`${t.name} suspended`)} className="text-muted-foreground hover:text-foreground">Suspend</button>
                 </td>
               </tr>
             ))}
@@ -241,12 +250,20 @@ function AttendanceTab() {
 }
 
 function BroadcastsTab() {
+  const { data } = useAdminData();
+  const items = data?.broadcasts.length
+    ? data.broadcasts.map((b: any) => ({
+        id: b.id, tutor: b.tutor_id.slice(0, 6), avatar: b.tutor_id[0]?.toUpperCase() ?? "T",
+        type: b.priority, title: b.title, body: b.message, when: new Date(b.created_at).toLocaleString(),
+      }))
+    : mockBroadcasts;
   return (
     <div className="space-y-3">
       <div className="glass-strong rounded-2xl p-4 text-sm">
         Moderate tutor-posted broadcasts. Pin important updates so they surface to every student.
       </div>
-      {broadcasts.map((b) => (
+      {items.length === 0 && <div className="glass rounded-2xl p-8 text-center text-sm text-muted-foreground">No broadcasts yet.</div>}
+      {items.map((b) => (
         <div key={b.id} className="glass rounded-2xl p-4 flex items-start gap-3">
           <div className="size-10 rounded-xl bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground text-sm font-semibold">{b.avatar}</div>
           <div className="flex-1 min-w-0">

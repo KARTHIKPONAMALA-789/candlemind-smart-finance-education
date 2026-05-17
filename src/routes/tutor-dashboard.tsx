@@ -1,12 +1,16 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, Users, DollarSign, TrendingUp, Plus, Star, Eye, Upload, Radio, CalendarClock, BarChart3, Send } from "lucide-react";
 import { AppShell } from "@/components/app/AppShell";
 import { StatCard } from "@/components/app/StatCard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { useAuth } from "@/hooks/use-auth";
+import { fetchTutorOverview, postBroadcast } from "@/lib/dashboard-queries";
+import { supabase } from "@/integrations/supabase/client";
 import { adminCoursePerf, adminRevenue, courses } from "@/lib/mock-data";
-import { liveClasses, broadcasts as initialBroadcasts, type Broadcast } from "@/lib/learning-data";
+import { liveClasses as mockLiveClasses, broadcasts as initialBroadcasts, type Broadcast } from "@/lib/learning-data";
 import { AreaChart, Area, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { toast } from "sonner";
 
@@ -58,14 +62,28 @@ function TutorDashboard() {
   );
 }
 
+function useTutorData() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["tutor-dashboard", user?.id],
+    queryFn: () => fetchTutorOverview(user!.id),
+    enabled: !!user,
+  });
+}
+
 function Overview() {
+  const { data } = useTutorData();
+  const totalStudents = data?.totalStudents ?? 0;
+  const totalCourses = data?.courses.length ?? 0;
+  const upcoming = (data?.liveClasses ?? []).filter((l: any) => new Date(l.scheduled_date) > new Date()).length;
+
   return (
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Active Students" value="1,160" delta="+8.4%" icon={Users} />
-        <StatCard label="Course Revenue" value="$29,500" delta="+12.1%" icon={DollarSign} />
+        <StatCard label="Active Students" value={totalStudents.toLocaleString()} delta="+8.4%" icon={Users} />
+        <StatCard label="My Courses" value={String(totalCourses)} delta={`${data?.courses.filter((c: any) => c.published).length ?? 0} published`} icon={BookOpen} />
         <StatCard label="Avg. Rating" value="4.8 ★" delta="+0.2" icon={Star} />
-        <StatCard label="Course Views" value="48,212" delta="+18%" icon={Eye} />
+        <StatCard label="Upcoming Live" value={String(upcoming)} delta={`${data?.liveClasses.length ?? 0} total`} icon={CalendarClock} />
       </div>
 
       <div className="mt-6 grid lg:grid-cols-3 gap-4">
@@ -112,50 +130,67 @@ function Overview() {
 }
 
 function CoursesTab() {
+  const { data, isLoading } = useTutorData();
+  const dbCourses = data?.courses ?? [];
+  const rows = dbCourses.length
+    ? dbCourses.map((c: any) => ({
+        id: c.id, title: c.title, lessons: 0, level: c.difficulty,
+        color: "from-blue-500 to-violet-500", students: c.students, rating: 0,
+        revenue: 0, progress: c.progress, published: c.published,
+      }))
+    : [];
+
   return (
     <div className="glass rounded-2xl p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="text-sm font-medium">Your courses</div>
-          <div className="text-xs text-muted-foreground">Performance overview</div>
+          <div className="text-xs text-muted-foreground">{isLoading ? "Loading…" : `${rows.length} course${rows.length === 1 ? "" : "s"}`}</div>
         </div>
         <a href="/tutor-dashboard?tab=upload" className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition">
           <Plus className="size-3.5" /> New course
         </a>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="text-xs text-muted-foreground border-b border-border">
-            <tr><th className="text-left py-2 font-medium">Course</th><th className="text-left font-medium">Students</th><th className="text-left font-medium">Rating</th><th className="text-left font-medium">Revenue</th><th className="text-left font-medium">Progress</th><th className="text-right font-medium">Actions</th></tr>
-          </thead>
-          <tbody>
-            {myCourses.map((c) => (
-              <motion.tr key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border">
-                <td className="py-3 flex items-center gap-3">
-                  <div className={`size-9 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-primary-foreground font-semibold text-xs`}>
-                    <BookOpen className="size-4" />
-                  </div>
-                  <div>
-                    <div className="font-medium">{c.title}</div>
-                    <div className="text-xs text-muted-foreground">{c.lessons} lessons · {c.level}</div>
-                  </div>
-                </td>
-                <td>{c.students.toLocaleString()}</td>
-                <td className="text-primary">{c.rating} ★</td>
-                <td>${c.revenue.toLocaleString()}</td>
-                <td className="w-40">
-                  <div className="h-1.5 rounded-full bg-foreground/5 overflow-hidden">
-                    <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
-                  </div>
-                </td>
-                <td className="text-right text-xs">
-                  <button className="text-primary hover:underline">Edit</button>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {rows.length === 0 ? (
+        <div className="text-center py-12 text-sm text-muted-foreground">
+          You haven't created any courses yet. Click <span className="text-primary">New course</span> to get started.
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="text-xs text-muted-foreground border-b border-border">
+              <tr><th className="text-left py-2 font-medium">Course</th><th className="text-left font-medium">Students</th><th className="text-left font-medium">Status</th><th className="text-left font-medium">Progress</th><th className="text-right font-medium">Actions</th></tr>
+            </thead>
+            <tbody>
+              {rows.map((c) => (
+                <motion.tr key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border">
+                  <td className="py-3 flex items-center gap-3">
+                    <div className={`size-9 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-primary-foreground font-semibold text-xs`}>
+                      <BookOpen className="size-4" />
+                    </div>
+                    <div>
+                      <div className="font-medium">{c.title}</div>
+                      <div className="text-xs text-muted-foreground">{c.level}</div>
+                    </div>
+                  </td>
+                  <td>{c.students.toLocaleString()}</td>
+                  <td>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${c.published ? "bg-primary/15 text-primary" : "bg-warning/15 text-warning"}`}>{c.published ? "Published" : "Draft"}</span>
+                  </td>
+                  <td className="w-40">
+                    <div className="h-1.5 rounded-full bg-foreground/5 overflow-hidden">
+                      <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
+                    </div>
+                  </td>
+                  <td className="text-right text-xs">
+                    <button className="text-primary hover:underline">Edit</button>
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
@@ -214,10 +249,41 @@ function Field({ label, placeholder }: { label: string; placeholder: string }) {
 }
 
 function LiveTab() {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const { data } = useTutorData();
+  const dbClasses = data?.liveClasses ?? [];
+  const items = dbClasses.length
+    ? dbClasses.map((l: any) => {
+        const date = new Date(l.scheduled_date);
+        const status = date < new Date(Date.now() - l.duration_min * 60_000) ? "past" : date < new Date() ? "live" : "upcoming";
+        return { id: l.id, title: l.class_title, when: date.toLocaleString(), duration: `${l.duration_min}m`, attendees: 0, status };
+      })
+    : mockLiveClasses;
+
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
+  const [duration, setDuration] = useState("60");
+  const [link, setLink] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !title || !date) return;
+    const { error } = await supabase.from("live_classes").insert({
+      tutor_id: user.id, class_title: title, scheduled_date: new Date(date).toISOString(),
+      duration_min: Number(duration) || 60, meeting_link: link || null,
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Live class scheduled");
+    setTitle(""); setDate(""); setLink("");
+    qc.invalidateQueries({ queryKey: ["tutor-dashboard"] });
+  };
+
   return (
     <div className="grid lg:grid-cols-3 gap-4">
       <div className="lg:col-span-2 space-y-3">
-        {liveClasses.map((l) => (
+        {items.length === 0 && <div className="glass rounded-2xl p-8 text-center text-sm text-muted-foreground">No live classes yet — schedule one →</div>}
+        {items.map((l: any) => (
           <div key={l.id} className="glass rounded-2xl p-4 flex items-center gap-4">
             <div className={`size-12 rounded-xl grid place-items-center ${l.status === "live" ? "bg-destructive/15 text-destructive" : "bg-primary/15 text-primary"}`}>
               <CalendarClock className="size-5" />
@@ -228,18 +294,30 @@ function LiveTab() {
                 <span className="text-muted-foreground">· {l.duration}</span>
               </div>
               <div className="font-medium text-sm">{l.title}</div>
-              <div className="text-xs text-muted-foreground">{l.when} · {l.attendees} registered</div>
+              <div className="text-xs text-muted-foreground">{l.when}</div>
             </div>
             <button className="text-xs px-3 py-1.5 rounded-lg bg-secondary border border-border hover:bg-foreground/5 transition">Manage</button>
           </div>
         ))}
       </div>
-      <form onSubmit={(e) => { e.preventDefault(); toast.success("Live class scheduled"); }} className="glass-strong rounded-2xl p-5 space-y-3">
+      <form onSubmit={submit} className="glass-strong rounded-2xl p-5 space-y-3">
         <div className="text-sm font-medium">Schedule live class</div>
-        <Field label="Title" placeholder="e.g. Earnings season recap" />
-        <Field label="Date & time" placeholder="e.g. Fri 7:00 PM" />
-        <Field label="Duration" placeholder="e.g. 45m" />
-        <Field label="Meeting link" placeholder="https://meet..." />
+        <div>
+          <div className="text-xs font-medium mb-1.5">Title</div>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Earnings season recap" className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Date & time</div>
+          <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Duration (min)</div>
+          <input value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="60" className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Meeting link</div>
+          <input value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://meet..." className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+        </div>
         <button type="submit" className="w-full px-4 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">Schedule</button>
       </form>
     </div>
@@ -294,22 +372,39 @@ function Progress({ value }: { value: number }) {
 }
 
 function BroadcastTab() {
-  const [posts, setPosts] = useState<Broadcast[]>(initialBroadcasts);
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const { data } = useTutorData();
+  const dbPosts = data?.broadcasts ?? [];
+  const posts: Broadcast[] = dbPosts.length
+    ? dbPosts.map((b: any) => ({
+        id: b.id, tutor: "You", avatar: "Y",
+        type: (b.priority === "high" ? "deadline" : "announcement") as Broadcast["type"],
+        title: b.title, body: b.message, when: new Date(b.created_at).toLocaleString(),
+      }))
+    : initialBroadcasts;
+
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [type, setType] = useState<Broadcast["type"]>("announcement");
+  const [priority, setPriority] = useState("normal");
 
-  const post = (e: React.FormEvent) => {
+  const post = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    setPosts([{ id: `n${Date.now()}`, tutor: "You", avatar: "Y", type, title, body, when: "just now" }, ...posts]);
-    setTitle(""); setBody("");
-    toast.success("Broadcast sent to your students");
+    if (!title.trim() || !user) return;
+    try {
+      await postBroadcast({ tutor_id: user.id, title, message: body, priority });
+      setTitle(""); setBody("");
+      toast.success("Broadcast sent to your students");
+      qc.invalidateQueries({ queryKey: ["tutor-dashboard"] });
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to send");
+    }
   };
 
   return (
     <div className="grid lg:grid-cols-[1fr_360px] gap-4">
       <div className="space-y-3">
+        {posts.length === 0 && <div className="glass rounded-2xl p-8 text-center text-sm text-muted-foreground">No broadcasts yet.</div>}
         {posts.map((b) => (
           <motion.div key={b.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-2xl p-4">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
@@ -323,11 +418,10 @@ function BroadcastTab() {
       </div>
       <form onSubmit={post} className="glass-strong rounded-2xl p-5 space-y-3 h-fit sticky top-20">
         <div className="flex items-center gap-2 text-sm font-medium"><Radio className="size-4 text-accent" /> New broadcast</div>
-        <select value={type} onChange={(e) => setType(e.target.value as Broadcast["type"])} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none">
-          <option value="announcement">Announcement</option>
-          <option value="deadline">Deadline</option>
-          <option value="live">Live class</option>
-          <option value="market">Market update</option>
+        <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none">
+          <option value="normal">Normal</option>
+          <option value="high">High priority</option>
+          <option value="low">Low</option>
         </select>
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
         <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={4} placeholder="Write your message..." className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
