@@ -62,14 +62,28 @@ function TutorDashboard() {
   );
 }
 
+function useTutorData() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["tutor-dashboard", user?.id],
+    queryFn: () => fetchTutorOverview(user!.id),
+    enabled: !!user,
+  });
+}
+
 function Overview() {
+  const { data } = useTutorData();
+  const totalStudents = data?.totalStudents ?? 0;
+  const totalCourses = data?.courses.length ?? 0;
+  const upcoming = (data?.liveClasses ?? []).filter((l: any) => new Date(l.scheduled_date) > new Date()).length;
+
   return (
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Active Students" value="1,160" delta="+8.4%" icon={Users} />
-        <StatCard label="Course Revenue" value="$29,500" delta="+12.1%" icon={DollarSign} />
+        <StatCard label="Active Students" value={totalStudents.toLocaleString()} delta="+8.4%" icon={Users} />
+        <StatCard label="My Courses" value={String(totalCourses)} delta={`${data?.courses.filter((c: any) => c.published).length ?? 0} published`} icon={BookOpen} />
         <StatCard label="Avg. Rating" value="4.8 ★" delta="+0.2" icon={Star} />
-        <StatCard label="Course Views" value="48,212" delta="+18%" icon={Eye} />
+        <StatCard label="Upcoming Live" value={String(upcoming)} delta={`${data?.liveClasses.length ?? 0} total`} icon={CalendarClock} />
       </div>
 
       <div className="mt-6 grid lg:grid-cols-3 gap-4">
