@@ -132,7 +132,7 @@ function PsychologyCoach() {
               <div className="mt-3 text-sm">
                 {loading && <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="size-3.5 animate-spin text-primary" /> Listening calmly...</div>}
                 {advice && (
-                  <div className="prose prose-sm prose-invert max-w-none prose-headings:mt-3 prose-headings:mb-1 prose-headings:text-foreground prose-p:my-1.5 prose-ul:my-1.5 prose-li:my-0.5">
+                  <div className="ai-md">
                     <ReactMarkdown>{advice}</ReactMarkdown>
                   </div>
                 )}
