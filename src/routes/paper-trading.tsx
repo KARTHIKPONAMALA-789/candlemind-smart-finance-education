@@ -85,7 +85,7 @@ function PaperTrading() {
               <span className="font-mono font-medium">{stock.ticker}</span>
               <span className={`text-sm font-medium ${stock.change >= 0 ? "text-primary" : "text-destructive"}`}>{stock.change >= 0 ? "+" : ""}{stock.change}%</span>
             </div>
-            <div className="text-2xl font-display font-bold mt-1">${stock.price.toFixed(2)}</div>
+            <div className="text-2xl font-display font-bold mt-1">{inr2(stock.price)}</div>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <button onClick={() => trade("buy")} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">
