@@ -67,45 +67,67 @@ export const fetchCompanyNews = createServerFn({ method: "POST" })
     }
   });
 
-export const fetchMarketNews = createServerFn({ method: "GET" }).handler(async () => {
-  const key = process.env.NEWS_API_KEY;
-  if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
-  try {
-    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
-      "indian stock market OR sensex OR nifty"
-    )}&language=en&sortBy=publishedAt&pageSize=12&apiKey=${key}`;
-    const res = await fetch(url, { headers: { "User-Agent": "CandleMinds/1.0" } });
-    if (res.status === 429) return { articles: [], error: "rate_limited" };
-    if (!res.ok) return { articles: [], error: `http_${res.status}` };
-    const json = (await res.json()) as {
-      status?: string;
-      articles?: Array<{
-        title?: string;
-        description?: string;
-        source?: { name?: string };
-        url?: string;
-        urlToImage?: string;
-        publishedAt?: string;
-      }>;
-    };
-    if (json.status && json.status !== "ok") return { articles: [], error: "api_error" };
-    const articles: NewsArticle[] = (json.articles ?? [])
-      .filter((a) => a.title && a.url && a.title !== "[Removed]")
-      .slice(0, 12)
-      .map((a, i) => ({
-        id: `${a.url}-${i}`,
-        headline: a.title!,
-        summary: a.description ?? "",
-        source: a.source?.name ?? "News",
-        url: a.url!,
-        image: a.urlToImage || null,
-        publishedAt: a.publishedAt ?? new Date().toISOString(),
-      }));
-    return { articles, error: null };
-  } catch (e) {
-    return { articles: [], error: String(e) };
-  }
+const CATEGORY_QUERIES: Record<string, string> = {
+  All: "indian stock market OR sensex OR nifty OR trading",
+  "Nifty/Sensex": "nifty OR sensex OR nse OR bse",
+  IPO: "IPO India OR initial public offering",
+  "Stock Market": "stock market India",
+  Trading: "intraday trading OR derivatives OR options trading",
+  "Global Markets": "global stock markets OR wall street OR nasdaq OR dow jones",
+  "AI & Fintech": "fintech OR AI stocks OR artificial intelligence finance",
+  Economy: "indian economy OR rbi OR inflation OR gdp",
+  Crypto: "cryptocurrency OR bitcoin OR ethereum",
+};
+
+const MarketNewsSchema = z.object({
+  category: z.string().max(40).optional().default("All"),
 });
+
+export const fetchMarketNews = createServerFn({ method: "POST" })
+  .inputValidator((input) => MarketNewsSchema.parse(input ?? {}))
+  .handler(async ({ data }) => {
+    const key = process.env.NEWS_API_KEY;
+    if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
+    const q = CATEGORY_QUERIES[data.category] ?? CATEGORY_QUERIES.All;
+    try {
+      const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+        q
+      )}&language=en&sortBy=publishedAt&pageSize=18&apiKey=${key}`;
+      const res = await fetch(url, { headers: { "User-Agent": "CandleMinds/1.0" } });
+      if (res.status === 429) return { articles: [], error: "rate_limited" };
+      if (!res.ok) return { articles: [], error: `http_${res.status}` };
+      const json = (await res.json()) as {
+        status?: string;
+        articles?: Array<{
+          title?: string;
+          description?: string;
+          source?: { name?: string };
+          url?: string;
+          urlToImage?: string;
+          publishedAt?: string;
+        }>;
+      };
+      if (json.status && json.status !== "ok") return { articles: [], error: "api_error" };
+      const articles: NewsArticle[] = (json.articles ?? [])
+        .filter((a) => a.title && a.url && a.title !== "[Removed]")
+        .slice(0, 18)
+        .map((a, i) => ({
+          id: `${a.url}-${i}`,
+          headline: a.title!,
+          summary: a.description ?? "",
+          source: a.source?.name ?? "News",
+          url: a.url!,
+          image: a.urlToImage || null,
+          publishedAt: a.publishedAt ?? new Date().toISOString(),
+        }));
+      return { articles, error: null };
+    } catch (e) {
+      return { articles: [], error: String(e) };
+    }
+  });
+
+export const NEWS_CATEGORIES = Object.keys(CATEGORY_QUERIES);
+
 
 const ExplainSchema = z.object({
   headline: z.string().min(1).max(500),
