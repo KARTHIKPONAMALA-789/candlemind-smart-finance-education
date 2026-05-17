@@ -1,3 +1,4 @@
+import { RoleGuard } from "@/components/auth/RoleGuard";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
@@ -6,7 +7,7 @@ import { AppShell } from "@/components/app/AppShell";
 
 export const Route = createFileRoute("/tutor")({
   head: () => ({ meta: [{ title: "AI Tutor — CandleMind" }] }),
-  component: Tutor,
+  component: () => <RoleGuard allow={["student"]}><Tutor /></RoleGuard>,
 });
 
 type Msg = { role: "user" | "assistant"; content: string };

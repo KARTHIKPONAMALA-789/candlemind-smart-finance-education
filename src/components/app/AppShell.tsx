@@ -1,40 +1,37 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import {
-  LayoutDashboard, Bot, BookOpen, Brain, LineChart, Users, Shield, Flame, Bell, Search, Settings,
-} from "lucide-react";
+import { Flame, Bell, Search, Settings, LogOut } from "lucide-react";
 import { ReactNode } from "react";
-
-const nav = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/tutor", label: "AI Tutor", icon: Bot },
-  { to: "/courses", label: "Courses", icon: BookOpen },
-  { to: "/quiz", label: "Quizzes", icon: Brain },
-  { to: "/screener", label: "Screener", icon: LineChart },
-  { to: "/referrals", label: "Referrals", icon: Users },
-  { to: "/admin", label: "Admin", icon: Shield },
-] as const;
+import { useAuth } from "@/hooks/use-auth";
+import { navForRole } from "@/lib/role-nav";
 
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { role, user, signOut } = useAuth();
+  const nav = navForRole(role);
+  const roleLabel = role ? role.charAt(0).toUpperCase() + role.slice(1) : "Guest";
+  const displayName = (user?.user_metadata?.full_name as string) ?? user?.email?.split("@")[0] ?? "Learner";
 
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/60 backdrop-blur-xl">
         <Link to="/" className="flex items-center gap-2 px-5 h-16 border-b border-border">
           <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
             <Flame className="size-4 text-primary-foreground" />
           </div>
-          <span className="font-display font-semibold">CandleMind</span>
+          <div className="flex flex-col leading-tight">
+            <span className="font-display font-semibold">CandleMind</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{roleLabel} portal</span>
+          </div>
         </Link>
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {nav.map((n) => {
-            const active = pathname === n.to;
+            const [base] = n.to.split("?");
+            const active = pathname === base;
             return (
               <Link
                 key={n.to}
-                to={n.to}
+                to={base}
                 className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition
                   ${active ? "text-foreground bg-foreground/5" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"}`}
               >
@@ -51,20 +48,27 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
             );
           })}
         </nav>
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border space-y-2">
           <div className="glass rounded-xl p-3 text-xs">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground font-semibold">A</div>
-              <div>
-                <div className="text-foreground font-medium">Alex Rivera</div>
-                <div className="text-muted-foreground">Pro plan</div>
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground font-semibold">
+                {displayName.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <div className="text-foreground font-medium truncate">{displayName}</div>
+                <div className="text-muted-foreground">{roleLabel}</div>
               </div>
             </div>
           </div>
+          <button
+            onClick={() => signOut()}
+            className="w-full inline-flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground py-2 rounded-lg hover:bg-foreground/5 transition"
+          >
+            <LogOut className="size-3.5" /> Sign out
+          </button>
         </div>
       </aside>
 
-      {/* Main */}
       <div className="flex-1 min-w-0">
         <header className="h-16 border-b border-border px-4 lg:px-8 flex items-center justify-between bg-background/40 backdrop-blur-xl sticky top-0 z-30">
           <div>
