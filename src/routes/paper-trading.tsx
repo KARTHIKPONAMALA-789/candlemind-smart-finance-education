@@ -115,10 +115,10 @@ function PaperTrading() {
                   <tr key={h.ticker} className="border-b border-border last:border-none hover:bg-foreground/5 transition">
                     <td className="py-3 font-mono font-medium">{h.ticker}</td>
                     <td>{h.qty}</td>
-                    <td className="text-muted-foreground">${h.avg.toFixed(2)}</td>
-                    <td>${h.last.toFixed(2)}</td>
-                    <td>${(h.last * h.qty).toFixed(2)}</td>
-                    <td className={`text-right font-medium ${pl >= 0 ? "text-primary" : "text-destructive"}`}>{pl >= 0 ? "+" : ""}${pl.toFixed(2)}</td>
+                    <td className="text-muted-foreground">{inr2(h.avg)}</td>
+                    <td>{inr2(h.last)}</td>
+                    <td>{inr2(h.last * h.qty)}</td>
+                    <td className={`text-right font-medium ${pl >= 0 ? "text-primary" : "text-destructive"}`}>{pl >= 0 ? "+" : ""}{inr2(pl)}</td>
                   </tr>
                 );
               })}
