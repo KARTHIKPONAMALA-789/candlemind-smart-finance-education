@@ -42,11 +42,11 @@ function TutorDashboard() {
     <AppShell title="Tutor Studio" subtitle="Manage your courses, students and live sessions">
       <div className="flex gap-1 overflow-x-auto pb-2 mb-5 border-b border-border">
         {tabs.map((t) => (
-          <a key={t.id} href={`/tutor-dashboard?tab=${t.id}`}
+          <Link key={t.id} to="/tutor-dashboard" search={{ tab: t.id }}
             className={`px-3 py-2 text-sm rounded-lg whitespace-nowrap transition relative ${tab === t.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
             {t.label}
             {tab === t.id && <motion.div layoutId="tutor-tab" className="absolute bottom-[-9px] left-0 right-0 h-0.5 bg-[image:var(--gradient-primary)]" />}
-          </a>
+          </Link>
         ))}
       </div>
 
