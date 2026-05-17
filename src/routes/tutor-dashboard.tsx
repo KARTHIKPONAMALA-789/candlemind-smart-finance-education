@@ -215,32 +215,158 @@ function UploadTab() {
           <Field label="Level" placeholder="Beginner / Intermediate / Advanced" />
           <Field label="Estimated duration" placeholder="e.g. 4h" />
         </div>
-        <Field label="Cover video link (YouTube / Vimeo)" placeholder="https://..." />
+const LEVELS = ["Beginner", "Intermediate", "Advanced"] as const;
+const YOUTUBE_VIMEO = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\/.+/i;
+
+function UploadTab() {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [level, setLevel] = useState<typeof LEVELS[number] | "">("");
+  const [duration, setDuration] = useState("");
+  const [coverUrl, setCoverUrl] = useState("");
+  const [lessonPlan, setLessonPlan] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [dragging, setDragging] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const lessonCount = useMemo(
+    () => lessonPlan.split("\n").map((l) => l.trim()).filter(Boolean).length,
+    [lessonPlan]
+  );
+  const coverOk = YOUTUBE_VIMEO.test(coverUrl.trim());
+  const checklist = [
+    { label: "Title set", ok: title.trim().length > 2 },
+    { label: "Cover video link valid", ok: coverOk },
+    { label: "≥ 5 lessons in plan", ok: lessonCount >= 5 },
+    { label: "Resources attached", ok: files.length > 0 },
+  ];
+  const readyToPublish = checklist.every((c) => c.ok);
+
+  const addFiles = (incoming: FileList | File[]) => {
+    const arr = Array.from(incoming).slice(0, 10);
+    setFiles((prev) => [...prev, ...arr].slice(0, 10));
+    if (arr.length) toast.success(`${arr.length} file${arr.length === 1 ? "" : "s"} attached`);
+  };
+
+  const onDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragging(false);
+    if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files);
+  };
+  const onPickFiles = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length) addFiles(e.target.files);
+    e.target.value = "";
+  };
+
+  const reset = () => {
+    setTitle(""); setDescription(""); setLevel(""); setDuration("");
+    setCoverUrl(""); setLessonPlan(""); setFiles([]);
+  };
+
+  const save = async (publish: boolean) => {
+    if (!title.trim()) return toast.error("Course title is required");
+    if (coverUrl && !coverOk) return toast.error("Cover link must be YouTube or Vimeo");
+    if (!user) return toast.error("Sign in as a tutor to save courses");
+    setSubmitting(true);
+    const composedDescription = [
+      description.trim(),
+      duration.trim() && `Duration: ${duration.trim()}`,
+      lessonPlan.trim() && `\nLesson plan:\n${lessonPlan.trim()}`,
+      files.length && `\nResources: ${files.map((f) => f.name).join(", ")}`,
+    ].filter(Boolean).join("\n");
+    const { error } = await supabase.from("courses").insert({
+      tutor_id: user.id,
+      title: title.trim(),
+      description: composedDescription || null,
+      thumbnail: coverUrl.trim() || null,
+      difficulty: level || "Beginner",
+      category: duration.trim() || null,
+      published: publish,
+    });
+    setSubmitting(false);
+    if (error) return toast.error(error.message);
+    toast.success(publish ? "Course published" : "Course saved as draft");
+    reset();
+    qc.invalidateQueries({ queryKey: ["tutor-dashboard"] });
+  };
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); save(false); }} className="grid lg:grid-cols-3 gap-4">
+      <div className="lg:col-span-2 glass rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-2 text-sm font-medium"><Upload className="size-4 text-primary" /> New course</div>
+        <Field label="Course title" placeholder="e.g. Mastering Candlestick Patterns" value={title} onChange={setTitle} />
+        <Field label="Short description" placeholder="One-line summary" value={description} onChange={setDescription} />
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-xs font-medium mb-1.5">Level</div>
+            <select value={level} onChange={(e) => setLevel(e.target.value as typeof LEVELS[number])} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30">
+              <option value="">Select level</option>
+              {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+            </select>
+          </div>
+          <Field label="Estimated duration" placeholder="e.g. 4h" value={duration} onChange={setDuration} />
+        </div>
         <div>
-          <div className="text-xs font-medium mb-1.5">Lesson plan</div>
-          <textarea rows={5} placeholder="1. Intro to candles&#10;2. Doji & spinning tops&#10;3. Engulfing patterns..." className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+          <Field label="Cover video link (YouTube / Vimeo)" placeholder="https://..." value={coverUrl} onChange={setCoverUrl} />
+          {coverUrl && !coverOk && <div className="text-[11px] text-destructive mt-1">Must be a YouTube or Vimeo URL</div>}
+        </div>
+        <div>
+          <div className="text-xs font-medium mb-1.5">Lesson plan <span className="text-muted-foreground">({lessonCount} lesson{lessonCount === 1 ? "" : "s"})</span></div>
+          <textarea value={lessonPlan} onChange={(e) => setLessonPlan(e.target.value)} rows={5} placeholder="1. Intro to candles&#10;2. Doji & spinning tops&#10;3. Engulfing patterns..." className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
         </div>
         <div className="flex gap-2">
-          <button type="submit" className="px-4 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">Save draft</button>
-          <button type="button" onClick={() => toast.success("Course published")} className="px-4 py-2 rounded-xl border border-border text-sm font-medium hover:bg-foreground/5 transition">Publish</button>
+          <button type="submit" disabled={submitting} className="px-4 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition disabled:opacity-60 inline-flex items-center gap-2">
+            {submitting && <Loader2 className="size-3.5 animate-spin" />} Save draft
+          </button>
+          <button type="button" disabled={submitting || !readyToPublish} onClick={() => save(true)} className="px-4 py-2 rounded-xl border border-border text-sm font-medium hover:bg-foreground/5 transition disabled:opacity-50 disabled:cursor-not-allowed">
+            Publish
+          </button>
         </div>
       </div>
       <div className="space-y-3">
         <div className="glass-strong rounded-2xl p-5">
           <div className="text-sm font-medium">Upload resources</div>
           <p className="text-xs text-muted-foreground mt-1">PDFs, slides, datasets — drag & drop or browse.</p>
-          <div className="mt-3 border-2 border-dashed border-border rounded-xl py-8 grid place-items-center text-xs text-muted-foreground">
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={onDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={`mt-3 border-2 border-dashed rounded-xl py-8 grid place-items-center text-xs cursor-pointer transition ${dragging ? "border-primary bg-primary/5 text-foreground" : "border-border text-muted-foreground"}`}
+          >
             <Upload className="size-5 text-primary mb-2" />
-            Drop files here
+            {dragging ? "Release to attach" : "Drop files here or click"}
           </div>
+          <input ref={fileInputRef} type="file" multiple className="hidden" onChange={onPickFiles} />
+          {files.length > 0 && (
+            <ul className="mt-3 space-y-1.5">
+              {files.map((f, i) => (
+                <li key={`${f.name}-${i}`} className="flex items-center gap-2 text-xs bg-secondary rounded-lg px-2.5 py-1.5">
+                  <FileText className="size-3.5 text-primary shrink-0" />
+                  <span className="truncate flex-1">{f.name}</span>
+                  <button type="button" onClick={() => setFiles((p) => p.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-destructive">
+                    <X className="size-3.5" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        <div className="glass rounded-2xl p-5 text-xs text-muted-foreground">
-          <div className="text-sm font-medium text-foreground mb-1">Publishing checklist</div>
-          <ul className="space-y-1 list-disc list-inside">
-            <li>Cover video uploaded</li>
-            <li>≥ 5 lessons</li>
-            <li>1 quiz per module</li>
-            <li>Resources attached</li>
+        <div className="glass rounded-2xl p-5 text-xs">
+          <div className="text-sm font-medium text-foreground mb-2">Publishing checklist</div>
+          <ul className="space-y-1.5">
+            {checklist.map((c) => (
+              <li key={c.label} className={`flex items-center gap-2 ${c.ok ? "text-foreground" : "text-muted-foreground"}`}>
+                <span className={`size-4 rounded-full grid place-items-center ${c.ok ? "bg-primary/20 text-primary" : "bg-foreground/5"}`}>
+                  {c.ok ? <Check className="size-2.5" /> : <span className="size-1.5 rounded-full bg-muted-foreground/40" />}
+                </span>
+                {c.label}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -248,11 +374,16 @@ function UploadTab() {
   );
 }
 
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
+function Field({ label, placeholder, value, onChange }: { label: string; placeholder: string; value?: string; onChange?: (v: string) => void }) {
   return (
     <div>
       <div className="text-xs font-medium mb-1.5">{label}</div>
-      <input placeholder={placeholder} className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30" />
+      <input
+        placeholder={placeholder}
+        value={value ?? ""}
+        onChange={(e) => onChange?.(e.target.value)}
+        className="w-full bg-secondary border border-border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 ring-primary/30"
+      />
     </div>
   );
 }
