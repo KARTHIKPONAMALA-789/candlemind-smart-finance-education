@@ -20,6 +20,7 @@ import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PsychologyRouteImport } from './routes/psychology'
 import { Route as PaperTradingRouteImport } from './routes/paper-trading'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LiveChartRouteImport } from './routes/live-chart'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as BroadcastsRouteImport } from './routes/broadcasts'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -85,6 +86,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LiveChartRoute = LiveChartRouteImport.update({
+  id: '/live-chart',
+  path: '/live-chart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesRoute = CoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteWithChildren
   '/broadcasts': typeof BroadcastsRoute
   '/courses': typeof CoursesRoute
+  '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
   '/psychology': typeof PsychologyRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
   '/broadcasts': typeof BroadcastsRoute
   '/courses': typeof CoursesRoute
+  '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
   '/psychology': typeof PsychologyRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteWithChildren
   '/broadcasts': typeof BroadcastsRoute
   '/courses': typeof CoursesRoute
+  '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
   '/psychology': typeof PsychologyRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/broadcasts'
     | '/courses'
+    | '/live-chart'
     | '/login'
     | '/paper-trading'
     | '/psychology'
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/broadcasts'
     | '/courses'
+    | '/live-chart'
     | '/login'
     | '/paper-trading'
     | '/psychology'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/broadcasts'
     | '/courses'
+    | '/live-chart'
     | '/login'
     | '/paper-trading'
     | '/psychology'
@@ -273,6 +285,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   BroadcastsRoute: typeof BroadcastsRoute
   CoursesRoute: typeof CoursesRoute
+  LiveChartRoute: typeof LiveChartRoute
   LoginRoute: typeof LoginRoute
   PaperTradingRoute: typeof PaperTradingRoute
   PsychologyRoute: typeof PsychologyRoute
@@ -365,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/live-chart': {
+      id: '/live-chart'
+      path: '/live-chart'
+      fullPath: '/live-chart'
+      preLoaderRoute: typeof LiveChartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses': {
       id: '/courses'
       path: '/courses'
@@ -453,6 +473,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   BroadcastsRoute: BroadcastsRoute,
   CoursesRoute: CoursesRoute,
+  LiveChartRoute: LiveChartRoute,
   LoginRoute: LoginRoute,
   PaperTradingRoute: PaperTradingRoute,
   PsychologyRoute: PsychologyRoute,

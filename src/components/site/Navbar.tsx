@@ -19,6 +19,7 @@ export function Navbar() {
           <a href="#features" className="hover:text-foreground transition">Features</a>
           <Link to="/courses" className="hover:text-foreground transition">Courses</Link>
           <Link to="/screener" className="hover:text-foreground transition">Screener</Link>
+          <Link to="/live-chart" className="hover:text-foreground transition">Live Chart</Link>
           <Link to="/tutor" className="hover:text-foreground transition">AI Tutor</Link>
           <a href="#pricing" className="hover:text-foreground transition">Pricing</a>
         </nav>
