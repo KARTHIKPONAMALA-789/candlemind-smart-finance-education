@@ -17,7 +17,7 @@ export const explainStock = createServerFn({ method: "POST" })
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) return { explanation: "AI explanations are temporarily unavailable.", error: "missing_key" };
 
-    const prompt = `Give a beginner-friendly explanation of ${data.name} (${data.ticker}). Sector: ${data.sector}. Price: $${data.price}, 24h change: ${data.change}%, P/E: ${data.pe}, Market Cap: ${data.mcap}.
+    const prompt = `Give a beginner-friendly explanation of the Indian-listed stock ${data.name} (NSE: ${data.ticker}). Sector: ${data.sector}. Price: ₹${data.price}, 24h change: ${data.change}%, P/E: ${data.pe}, Market Cap: ${data.mcap} (lakh-crore).
 
 Return 4 short sections (max 2 sentences each), plain language, no jargon:
 1. Company overview

@@ -120,7 +120,7 @@ function Referrals() {
                   <div className="text-sm font-medium truncate">{l.name}</div>
                   <div className="text-xs text-muted-foreground">{l.refs} referrals</div>
                 </div>
-                <div className="text-sm font-mono text-primary">${l.earned}</div>
+                <div className="text-sm font-mono text-primary">₹{l.earned.toLocaleString("en-IN")}</div>
               </div>
             ))}
           </div>
