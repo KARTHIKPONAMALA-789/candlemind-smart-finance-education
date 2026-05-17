@@ -51,7 +51,7 @@ function Dashboard() {
         <StatCard icon={Zap} label="XP this week" value={<span className="gradient-text">{xp.toLocaleString()}</span>} delta="+18% vs last" />
         <StatCard icon={Flame} label="Learning streak" value={`${streak} days`} delta="Top 3%" />
         <StatCard icon={Trophy} label="Mastery score" value={`${mastery}%`} delta="+4 pts" />
-        <StatCard icon={Wallet} label="Paper P/L" value={<span className={pnl >= 0 ? "text-primary" : "text-destructive"}>${pnl.toFixed(0)}</span>} delta={`Port. $${portfolio.toFixed(0)}`} />
+        <StatCard icon={Wallet} label="Paper P/L" value={<span className={pnl >= 0 ? "text-primary" : "text-destructive"}>{pnl >= 0 ? "+" : ""}₹{Math.round(pnl).toLocaleString("en-IN")}</span>} delta={`Port. ₹${Math.round(portfolio).toLocaleString("en-IN")}`} />
       </div>
 
       <div className="mt-6 grid lg:grid-cols-3 gap-4">
@@ -167,9 +167,9 @@ function Dashboard() {
                     <tr key={h.ticker} className="border-b border-border last:border-none">
                       <td className="py-2 font-mono font-medium">{h.ticker}</td>
                       <td>{h.qty}</td>
-                      <td className="text-muted-foreground">${h.avg.toFixed(2)}</td>
-                      <td>${h.last.toFixed(2)}</td>
-                      <td className={`text-right font-medium ${pl >= 0 ? "text-primary" : "text-destructive"}`}>{pl >= 0 ? "+" : ""}${pl.toFixed(2)}</td>
+                      <td className="text-muted-foreground">₹{h.avg.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                      <td>₹{h.last.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                      <td className={`text-right font-medium ${pl >= 0 ? "text-primary" : "text-destructive"}`}>{pl >= 0 ? "+" : ""}₹{pl.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>
                   );
                 })}
