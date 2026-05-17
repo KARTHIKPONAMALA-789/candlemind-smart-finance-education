@@ -37,7 +37,7 @@ function ResetPassword() {
           onChange={(e) => setPassword(e.target.value)} placeholder="New password"
           className="w-full glass rounded-xl px-3 py-2.5 bg-transparent outline-none text-sm focus:ring-2 ring-primary/40"
         />
-        <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium flex items-center justify-center gap-2 disabled:opacity-60">
+        <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium flex items-center justify-center gap-2 disabled:opacity-60">
           {loading && <Loader2 className="size-4 animate-spin" />} Update password
         </button>
       </motion.form>

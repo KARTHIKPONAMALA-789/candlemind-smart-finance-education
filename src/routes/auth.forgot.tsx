@@ -34,7 +34,7 @@ function Forgot() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative w-full max-w-md glass-strong rounded-3xl p-8">
         <Link to="/" className="flex items-center gap-2 mb-6">
           <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-            <Flame className="size-4 text-background" />
+            <Flame className="size-4 text-primary-foreground" />
           </div>
           <span className="font-display font-semibold">CandleMind</span>
         </Link>
@@ -54,7 +54,7 @@ function Forgot() {
                 <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-transparent outline-none text-sm flex-1" />
               </div>
             </label>
-            <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium flex items-center justify-center gap-2 disabled:opacity-60">
+            <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium flex items-center justify-center gap-2 disabled:opacity-60">
               {loading && <Loader2 className="size-4 animate-spin" />} Send reset link
             </button>
           </form>

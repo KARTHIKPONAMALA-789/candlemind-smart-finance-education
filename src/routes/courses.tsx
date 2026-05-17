@@ -30,7 +30,7 @@ function Courses() {
             <button
               key={c} onClick={() => setCat(c)}
               className={`px-3 py-1.5 rounded-full text-xs transition ${
-                cat === c ? "bg-[image:var(--gradient-primary)] text-background" : "glass hover:bg-white/10"
+                cat === c ? "bg-[image:var(--gradient-primary)] text-primary-foreground" : "glass hover:bg-foreground/10"
               }`}
             >{c}</button>
           ))}
@@ -57,9 +57,9 @@ function Courses() {
           >
             <div className={`h-36 bg-gradient-to-br ${c.color} relative`}>
               <div className="absolute inset-0 grid-bg opacity-30" />
-              <div className="absolute top-3 left-3 text-xs glass-strong rounded-md px-2 py-0.5 text-background">{c.cat}</div>
-              <div className="absolute top-3 right-3 text-xs glass-strong rounded-md px-2 py-0.5 text-background">{c.level}</div>
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-background/90 text-xs">
+              <div className="absolute top-3 left-3 text-xs glass-strong rounded-md px-2 py-0.5 text-primary-foreground">{c.cat}</div>
+              <div className="absolute top-3 right-3 text-xs glass-strong rounded-md px-2 py-0.5 text-primary-foreground">{c.level}</div>
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-primary-foreground/90 text-xs">
                 <span className="flex items-center gap-1"><Clock className="size-3" /> {c.lessons * 6} min</span>
                 <span className="flex items-center gap-1"><Trophy className="size-3" /> {c.lessons * 50} XP</span>
               </div>
@@ -67,13 +67,13 @@ function Courses() {
             <div className="p-5">
               <h3 className="font-display font-semibold">{c.title}</h3>
               <p className="text-xs text-muted-foreground mt-1">{c.lessons} lessons · Self-paced</p>
-              <div className="mt-4 h-1.5 rounded-full bg-white/5 overflow-hidden">
+              <div className="mt-4 h-1.5 rounded-full bg-foreground/5 overflow-hidden">
                 <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
               </div>
               <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
                 <span>{c.progress}% complete</span>
               </div>
-              <button className="mt-4 w-full inline-flex items-center justify-center gap-2 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-background text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">
+              <button className="mt-4 w-full inline-flex items-center justify-center gap-2 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition">
                 <Play className="size-4" /> {c.progress > 0 ? "Continue" : "Start"}
               </button>
             </div>

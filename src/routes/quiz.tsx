@@ -71,8 +71,8 @@ function Quiz() {
                       className={`text-left rounded-2xl px-5 py-4 border transition flex items-center justify-between
                         ${isCorrect ? "border-primary bg-primary/10" :
                           isWrong ? "border-destructive bg-destructive/10" :
-                          selected !== null ? "border-white/5 opacity-60" :
-                          "border-white/10 glass hover:bg-white/10"}`}
+                          selected !== null ? "border-border opacity-60" :
+                          "border-border glass hover:bg-foreground/10"}`}
                     >
                       <span className="text-sm">{opt}</span>
                       {isCorrect && <CheckCircle2 className="size-5 text-primary" />}
@@ -94,7 +94,7 @@ function Quiz() {
                 transition={{ type: "spring", stiffness: 200 }}
                 className="relative size-20 mx-auto rounded-full bg-[image:var(--gradient-primary)] grid place-items-center glow"
               >
-                <Trophy className="size-10 text-background" />
+                <Trophy className="size-10 text-primary-foreground" />
               </motion.div>
               <h2 className="relative mt-6 text-3xl font-display font-semibold">Quiz complete!</h2>
               <p className="relative mt-2 text-muted-foreground">
@@ -102,7 +102,7 @@ function Quiz() {
               </p>
               <button
                 onClick={reset}
-                className="relative mt-6 px-6 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-background text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
+                className="relative mt-6 px-6 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
               >
                 Try again
               </button>

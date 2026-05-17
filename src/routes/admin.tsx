@@ -31,7 +31,7 @@ function Admin() {
         <div className="absolute -top-10 right-10 size-60 rounded-full bg-accent/20 blur-3xl" />
         <div className="relative flex items-start gap-4">
           <div className="size-10 rounded-xl bg-[image:var(--gradient-primary)] grid place-items-center glow shrink-0">
-            <Sparkles className="size-5 text-background" />
+            <Sparkles className="size-5 text-primary-foreground" />
           </div>
           <div>
             <h3 className="font-display font-semibold">AI-generated insights</h3>
@@ -107,7 +107,7 @@ function Admin() {
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
         className="mt-6 glass rounded-2xl overflow-hidden"
       >
-        <div className="p-5 border-b border-white/5 flex items-center justify-between">
+        <div className="p-5 border-b border-border flex items-center justify-between">
           <div>
             <h3 className="font-display font-semibold">Recent students</h3>
             <p className="text-xs text-muted-foreground">Joining date & active course</p>
@@ -117,7 +117,7 @@ function Admin() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="text-xs text-muted-foreground">
-              <tr className="border-b border-white/5">
+              <tr className="border-b border-border">
                 <th className="text-left p-4 font-normal">Name</th>
                 <th className="text-left p-4 font-normal">Email</th>
                 <th className="text-left p-4 font-normal">Joined</th>
@@ -128,9 +128,9 @@ function Admin() {
             </thead>
             <tbody>
               {adminStudents.map((s) => (
-                <tr key={s.email} className="border-b border-white/5 hover:bg-white/5 transition">
+                <tr key={s.email} className="border-b border-border hover:bg-foreground/5 transition">
                   <td className="p-4 flex items-center gap-3">
-                    <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-background text-xs font-semibold">
+                    <div className="size-8 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground text-xs font-semibold">
                       {s.name.charAt(0)}
                     </div>
                     {s.name}

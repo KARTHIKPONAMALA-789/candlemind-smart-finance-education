@@ -85,11 +85,11 @@ export function RoleAuthCard({ role, mode }: { role: Role; mode: "login" | "regi
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative max-w-md">
           <Link to="/" className="flex items-center gap-2 mb-10">
             <div className="size-9 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-              <Flame className="size-4 text-background" />
+              <Flame className="size-4 text-primary-foreground" />
             </div>
             <span className="font-display text-lg font-semibold">CandleMind</span>
           </Link>
-          <div className={`inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs mb-4 bg-gradient-to-br ${meta.color} text-background`}>
+          <div className={`inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs mb-4 bg-gradient-to-br ${meta.color} text-primary-foreground`}>
             <meta.icon className="size-3" /> {meta.label} portal
           </div>
           <h2 className="text-4xl font-display font-semibold leading-tight">
@@ -112,14 +112,14 @@ export function RoleAuthCard({ role, mode }: { role: Role; mode: "login" | "regi
 
           <button
             onClick={handleGoogle} disabled={loading}
-            className="mt-6 w-full glass rounded-xl py-2.5 text-sm hover:bg-white/10 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            className="mt-6 w-full glass rounded-xl py-2.5 text-sm hover:bg-foreground/10 transition flex items-center justify-center gap-2 disabled:opacity-60"
           >
             <svg className="size-4" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" opacity=".7"/></svg>
             Continue with Google
           </button>
 
           <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-            <div className="flex-1 h-px bg-white/10" /> or email <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-foreground/10" /> or email <div className="flex-1 h-px bg-foreground/10" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -139,7 +139,7 @@ export function RoleAuthCard({ role, mode }: { role: Role; mode: "login" | "regi
             )}
 
             <button type="submit" disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading && <Loader2 className="size-4 animate-spin" />}
               {isLogin ? "Sign in" : "Create account"}

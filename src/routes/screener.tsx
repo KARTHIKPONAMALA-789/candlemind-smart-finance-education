@@ -48,7 +48,7 @@ function Screener() {
                 <button
                   key={s} onClick={() => setSector(s)}
                   className={`text-xs px-2.5 py-1 rounded-full transition ${
-                    sector === s ? "bg-[image:var(--gradient-primary)] text-background" : "glass hover:bg-white/10"
+                    sector === s ? "bg-[image:var(--gradient-primary)] text-primary-foreground" : "glass hover:bg-foreground/10"
                   }`}
                 >{s}</button>
               ))}
@@ -105,7 +105,7 @@ function Screener() {
           </div>
 
           <div className="mt-4 glass rounded-2xl overflow-hidden">
-            <div className="grid grid-cols-[1fr_100px_100px_120px_140px_100px] gap-3 px-5 py-3 text-xs text-muted-foreground border-b border-white/5">
+            <div className="grid grid-cols-[1fr_100px_100px_120px_140px_100px] gap-3 px-5 py-3 text-xs text-muted-foreground border-b border-border">
               <div>Company</div><div>Price</div><div>Change</div><div className="hidden md:block">Sector</div><div>Chart</div><div className="text-right">P/E</div>
             </div>
             {filtered.map((s, i) => {
@@ -114,7 +114,7 @@ function Screener() {
                 <motion.div
                   key={s.ticker}
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
-                  className="grid grid-cols-[1fr_100px_100px_120px_140px_100px] gap-3 px-5 py-4 items-center border-b border-white/5 hover:bg-white/5 transition"
+                  className="grid grid-cols-[1fr_100px_100px_120px_140px_100px] gap-3 px-5 py-4 items-center border-b border-border hover:bg-foreground/5 transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <button className="text-muted-foreground hover:text-primary"><Star className="size-4" /></button>

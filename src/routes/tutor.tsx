@@ -65,13 +65,13 @@ function Tutor() {
                 >
                   {m.role === "assistant" && (
                     <div className="size-9 rounded-xl bg-[image:var(--gradient-primary)] grid place-items-center shrink-0 glow">
-                      <Bot className="size-4 text-background" />
+                      <Bot className="size-4 text-primary-foreground" />
                     </div>
                   )}
                   <div
                     className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap
                       ${m.role === "user"
-                        ? "bg-[image:var(--gradient-primary)] text-background"
+                        ? "bg-[image:var(--gradient-primary)] text-primary-foreground"
                         : "glass"}`}
                   >
                     {m.content}
@@ -87,7 +87,7 @@ function Tutor() {
                   className="flex gap-3"
                 >
                   <div className="size-9 rounded-xl bg-[image:var(--gradient-primary)] grid place-items-center shrink-0">
-                    <Bot className="size-4 text-background" />
+                    <Bot className="size-4 text-primary-foreground" />
                   </div>
                   <div className="glass rounded-2xl px-4 py-3 flex items-center gap-1">
                     {[0, 1, 2].map((i) => (
@@ -105,7 +105,7 @@ function Tutor() {
           </div>
 
           {/* Composer */}
-          <div className="border-t border-white/5 p-4">
+          <div className="border-t border-border p-4">
             <form
               onSubmit={(e) => { e.preventDefault(); send(input); }}
               className="glass rounded-2xl flex items-center gap-2 px-3 py-2 focus-within:ring-2 ring-primary/40"
@@ -120,7 +120,7 @@ function Tutor() {
                 type="submit"
                 className="size-9 rounded-xl bg-[image:var(--gradient-primary)] grid place-items-center hover:shadow-[var(--shadow-glow)] transition"
               >
-                <Send className="size-4 text-background" />
+                <Send className="size-4 text-primary-foreground" />
               </button>
             </form>
             <div className="mt-2 text-[10px] text-muted-foreground text-center">
@@ -140,7 +140,7 @@ function Tutor() {
                 <button
                   key={p.label}
                   onClick={() => send(p.label)}
-                  className="w-full text-left text-sm glass rounded-xl px-3 py-2.5 flex items-center gap-2 hover:bg-white/10 transition"
+                  className="w-full text-left text-sm glass rounded-xl px-3 py-2.5 flex items-center gap-2 hover:bg-foreground/10 transition"
                 >
                   <p.icon className="size-4 text-primary" />
                   {p.label}
@@ -152,7 +152,7 @@ function Tutor() {
           <div className="glass-strong rounded-2xl p-5">
             <div className="text-sm font-medium">Today's focus</div>
             <div className="mt-2 text-xs text-muted-foreground">Technical analysis · Volume</div>
-            <div className="mt-4 h-2 rounded-full bg-white/5 overflow-hidden">
+            <div className="mt-4 h-2 rounded-full bg-foreground/5 overflow-hidden">
               <div className="h-full w-3/5 bg-[image:var(--gradient-primary)]" />
             </div>
             <div className="mt-2 text-xs text-muted-foreground">3 of 5 lessons</div>

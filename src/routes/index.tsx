@@ -72,13 +72,13 @@ function Landing() {
           >
             <Link
               to="/auth"
-              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
+              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition"
             >
               Start learning free <ArrowRight className="size-4 group-hover:translate-x-0.5 transition" />
             </Link>
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass-strong hover:bg-white/10 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass-strong hover:bg-foreground/10 transition"
             >
               <Play className="size-4" /> View live demo
             </Link>
@@ -92,8 +92,8 @@ function Landing() {
           >
             <div className="absolute -inset-4 bg-[image:var(--gradient-primary)] opacity-30 blur-3xl rounded-3xl" />
             <div className="relative glass-strong rounded-3xl p-3 shadow-2xl">
-              <div className="rounded-2xl overflow-hidden bg-background/80 border border-white/5">
-                <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-white/5">
+              <div className="rounded-2xl overflow-hidden bg-background/80 border border-border">
+                <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-border">
                   <span className="size-2.5 rounded-full bg-destructive/60" />
                   <span className="size-2.5 rounded-full bg-warning/60" />
                   <span className="size-2.5 rounded-full bg-success/60" />
@@ -225,7 +225,7 @@ function Landing() {
               </ul>
               <Link
                 to="/dashboard"
-                className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
+                className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition"
               >
                 Open the demo <ArrowRight className="size-4" />
               </Link>
@@ -262,7 +262,7 @@ function Landing() {
                 </div>
                 <p className="text-sm">{t.quote}</p>
                 <div className="mt-5 flex items-center gap-3">
-                  <div className="size-9 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-background font-semibold">
+                  <div className="size-9 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground font-semibold">
                     {t.avatar}
                   </div>
                   <div>
@@ -292,7 +292,7 @@ function Landing() {
                 className={`relative rounded-2xl p-6 ${p.popular ? "glass-strong gradient-border" : "glass"}`}
               >
                 {p.popular && (
-                  <span className="absolute -top-3 left-6 text-xs px-2 py-0.5 rounded-full bg-[image:var(--gradient-primary)] text-background font-medium">
+                  <span className="absolute -top-3 left-6 text-xs px-2 py-0.5 rounded-full bg-[image:var(--gradient-primary)] text-primary-foreground font-medium">
                     Most popular
                   </span>
                 )}
@@ -312,8 +312,8 @@ function Landing() {
                   to="/auth"
                   className={`mt-6 block text-center py-2.5 rounded-xl font-medium transition
                     ${p.popular
-                      ? "bg-[image:var(--gradient-primary)] text-background hover:shadow-[var(--shadow-glow)]"
-                      : "glass hover:bg-white/10"}`}
+                      ? "bg-[image:var(--gradient-primary)] text-primary-foreground hover:shadow-[var(--shadow-glow)]"
+                      : "glass hover:bg-foreground/10"}`}
                 >
                   {p.cta}
                 </Link>
@@ -337,7 +337,7 @@ function Landing() {
             </p>
             <Link
               to="/auth"
-              className="mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
+              className="mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition"
             >
               Get started free <ArrowRight className="size-4" />
             </Link>

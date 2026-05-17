@@ -97,13 +97,13 @@ function Dashboard() {
             >
               <div className={`h-28 bg-gradient-to-br ${c.color} relative`}>
                 <div className="absolute inset-0 grid-bg opacity-30" />
-                <div className="absolute bottom-3 left-3 text-xs text-background/80 bg-background/30 backdrop-blur rounded-md px-2 py-0.5">
+                <div className="absolute bottom-3 left-3 text-xs text-primary-foreground/80 bg-background/30 backdrop-blur rounded-md px-2 py-0.5">
                   {c.level}
                 </div>
               </div>
               <div className="p-4">
                 <h4 className="font-medium">{c.title}</h4>
-                <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                <div className="mt-3 h-1.5 rounded-full bg-foreground/5 overflow-hidden">
                   <div className="h-full bg-[image:var(--gradient-primary)]" style={{ width: `${c.progress}%` }} />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
@@ -126,7 +126,7 @@ function Dashboard() {
           <div className="absolute -top-10 -right-10 size-60 rounded-full bg-accent/20 blur-3xl" />
           <div className="relative flex items-start gap-4">
             <div className="size-12 rounded-2xl bg-[image:var(--gradient-primary)] grid place-items-center glow shrink-0">
-              <Bot className="size-6 text-background" />
+              <Bot className="size-6 text-primary-foreground" />
             </div>
             <div className="flex-1">
               <h3 className="font-display font-semibold">Ask your AI Tutor</h3>
@@ -137,7 +137,7 @@ function Dashboard() {
                 {["Explain RSI", "What is a P/E ratio?", "Why did NVDA jump?"].map((p) => (
                   <Link
                     key={p} to="/tutor"
-                    className="text-xs px-3 py-1.5 rounded-full glass hover:bg-white/10 transition"
+                    className="text-xs px-3 py-1.5 rounded-full glass hover:bg-foreground/10 transition"
                   >
                     {p}
                   </Link>
@@ -145,7 +145,7 @@ function Dashboard() {
               </div>
               <Link
                 to="/tutor"
-                className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-background text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
+                className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground text-sm font-medium hover:shadow-[var(--shadow-glow)] transition"
               >
                 Open AI Tutor <ArrowRight className="size-4" />
               </Link>
@@ -157,7 +157,7 @@ function Dashboard() {
             <div className="text-xs text-muted-foreground mb-2">Recommended lessons</div>
             <div className="space-y-2">
               {lessons.map((l) => (
-                <div key={l.id} className="flex items-center justify-between glass rounded-xl px-4 py-2.5 hover:bg-white/10 transition">
+                <div key={l.id} className="flex items-center justify-between glass rounded-xl px-4 py-2.5 hover:bg-foreground/10 transition">
                   <div className="flex items-center gap-3">
                     <div className="size-8 rounded-lg glass-strong grid place-items-center">
                       <BookOpen className="size-4 text-primary" />
@@ -185,7 +185,7 @@ function Dashboard() {
               <div key={i} className="flex gap-3">
                 <div className="relative">
                   <div className="size-2 rounded-full bg-primary mt-1.5" />
-                  {i < activity.length - 1 && <div className="absolute top-3 left-1/2 -translate-x-1/2 w-px h-full bg-white/10" />}
+                  {i < activity.length - 1 && <div className="absolute top-3 left-1/2 -translate-x-1/2 w-px h-full bg-foreground/10" />}
                 </div>
                 <div>
                   <div className="text-sm"><span className="font-medium">{a.who}</span> {a.what}</div>

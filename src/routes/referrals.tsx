@@ -49,7 +49,7 @@ function Referrals() {
               <code className="flex-1 text-sm font-mono truncate text-muted-foreground">{link}</code>
               <button
                 onClick={copy}
-                className="px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-background text-xs font-medium flex items-center gap-1.5 hover:shadow-[var(--shadow-glow)] transition"
+                className="px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground text-xs font-medium flex items-center gap-1.5 hover:shadow-[var(--shadow-glow)] transition"
               >
                 {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
                 {copied ? "Copied" : "Copy"}
@@ -57,10 +57,10 @@ function Referrals() {
             </div>
 
             <div className="mt-5 flex gap-2">
-              <button className="flex-1 glass rounded-xl py-2.5 text-sm hover:bg-white/10 transition flex items-center justify-center gap-2">
+              <button className="flex-1 glass rounded-xl py-2.5 text-sm hover:bg-foreground/10 transition flex items-center justify-center gap-2">
                 <Share2 className="size-4" /> Share
               </button>
-              <button className="flex-1 glass rounded-xl py-2.5 text-sm hover:bg-white/10 transition flex items-center justify-center gap-2">
+              <button className="flex-1 glass rounded-xl py-2.5 text-sm hover:bg-foreground/10 transition flex items-center justify-center gap-2">
                 <Mail className="size-4" /> Invite via email
               </button>
             </div>
@@ -110,11 +110,11 @@ function Referrals() {
               <div
                 key={l.rank}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition ${
-                  l.name === "You" ? "glass-strong gradient-border" : "glass hover:bg-white/10"
+                  l.name === "You" ? "glass-strong gradient-border" : "glass hover:bg-foreground/10"
                 }`}
               >
                 <div className={`size-7 rounded-lg grid place-items-center text-xs font-semibold ${
-                  l.rank === 1 ? "bg-[image:var(--gradient-primary)] text-background" : "bg-white/5"
+                  l.rank === 1 ? "bg-[image:var(--gradient-primary)] text-primary-foreground" : "bg-foreground/5"
                 }`}>{l.rank}</div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">{l.name}</div>
