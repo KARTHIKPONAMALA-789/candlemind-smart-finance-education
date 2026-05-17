@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Bot, BookOpen, Brain, LineChart, Users, Shield,
-  Megaphone, Wallet, Radio, Upload, GraduationCap, BarChart3, CalendarClock,
+  Megaphone, Wallet, Radio, Upload, GraduationCap, BarChart3, CalendarClock, HeartPulse,
 } from "lucide-react";
 import type { Role } from "@/hooks/use-auth";
 
@@ -13,7 +13,8 @@ export const studentNav: NavItem[] = [
   { to: "/quiz", label: "Quizzes", icon: Brain },
   { to: "/screener", label: "Screener", icon: LineChart },
   { to: "/broadcasts", label: "Broadcasts", icon: Megaphone },
-  { to: "/tutor", label: "AI Tutor", icon: Bot },
+  { to: "/tutor", label: "AI Mentor", icon: Bot },
+  { to: "/psychology", label: "Psychology Coach", icon: HeartPulse },
   { to: "/referrals", label: "Referrals", icon: Users },
 ];
 

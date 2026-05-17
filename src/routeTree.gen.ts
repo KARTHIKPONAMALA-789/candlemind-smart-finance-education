@@ -17,6 +17,7 @@ import { Route as ScreenerRouteImport } from './routes/screener'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as PsychologyRouteImport } from './routes/psychology'
 import { Route as PaperTradingRouteImport } from './routes/paper-trading'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as CoursesRouteImport } from './routes/courses'
@@ -67,6 +68,11 @@ const ReferralsRoute = ReferralsRouteImport.update({
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PsychologyRoute = PsychologyRouteImport.update({
+  id: '/psychology',
+  path: '/psychology',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaperTradingRoute = PaperTradingRouteImport.update({
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/courses': typeof CoursesRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
+  '/psychology': typeof PsychologyRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/courses': typeof CoursesRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
+  '/psychology': typeof PsychologyRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/courses': typeof CoursesRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
+  '/psychology': typeof PsychologyRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/login'
     | '/paper-trading'
+    | '/psychology'
     | '/quiz'
     | '/referrals'
     | '/reset-password'
@@ -220,6 +230,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/login'
     | '/paper-trading'
+    | '/psychology'
     | '/quiz'
     | '/referrals'
     | '/reset-password'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/login'
     | '/paper-trading'
+    | '/psychology'
     | '/quiz'
     | '/referrals'
     | '/reset-password'
@@ -263,6 +275,7 @@ export interface RootRouteChildren {
   CoursesRoute: typeof CoursesRoute
   LoginRoute: typeof LoginRoute
   PaperTradingRoute: typeof PaperTradingRoute
+  PsychologyRoute: typeof PsychologyRoute
   QuizRoute: typeof QuizRoute
   ReferralsRoute: typeof ReferralsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -329,6 +342,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/psychology': {
+      id: '/psychology'
+      path: '/psychology'
+      fullPath: '/psychology'
+      preLoaderRoute: typeof PsychologyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/paper-trading': {
@@ -435,6 +455,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesRoute: CoursesRoute,
   LoginRoute: LoginRoute,
   PaperTradingRoute: PaperTradingRoute,
+  PsychologyRoute: PsychologyRoute,
   QuizRoute: QuizRoute,
   ReferralsRoute: ReferralsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
