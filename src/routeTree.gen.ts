@@ -9,17 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TutorDashboardRouteImport } from './routes/tutor-dashboard'
 import { Route as TutorRouteImport } from './routes/tutor'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ScreenerRouteImport } from './routes/screener'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthRoleRegisterRouteImport } from './routes/auth.$role.register'
+import { Route as AuthRoleLoginRouteImport } from './routes/auth.$role.login'
 
+const TutorDashboardRoute = TutorDashboardRouteImport.update({
+  id: '/tutor-dashboard',
+  path: '/tutor-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TutorRoute = TutorRouteImport.update({
   id: '/tutor',
   path: '/tutor',
@@ -33,6 +45,11 @@ const SignupRoute = SignupRouteImport.update({
 const ScreenerRoute = ScreenerRouteImport.update({
   id: '/screener',
   path: '/screener',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReferralsRoute = ReferralsRouteImport.update({
@@ -60,6 +77,11 @@ const CoursesRoute = CoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -70,98 +92,170 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/forgot',
+  path: '/forgot',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthRoleRegisterRoute = AuthRoleRegisterRouteImport.update({
+  id: '/$role/register',
+  path: '/$role/register',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthRoleLoginRoute = AuthRoleLoginRouteImport.update({
+  id: '/$role/login',
+  path: '/$role/login',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRouteWithChildren
   '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/screener': typeof ScreenerRoute
   '/signup': typeof SignupRoute
   '/tutor': typeof TutorRoute
+  '/tutor-dashboard': typeof TutorDashboardRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/$role/login': typeof AuthRoleLoginRoute
+  '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRouteWithChildren
   '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/screener': typeof ScreenerRoute
   '/signup': typeof SignupRoute
   '/tutor': typeof TutorRoute
+  '/tutor-dashboard': typeof TutorDashboardRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/$role/login': typeof AuthRoleLoginRoute
+  '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRouteWithChildren
   '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/screener': typeof ScreenerRoute
   '/signup': typeof SignupRoute
   '/tutor': typeof TutorRoute
+  '/tutor-dashboard': typeof TutorDashboardRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/$role/login': typeof AuthRoleLoginRoute
+  '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/auth'
     | '/courses'
     | '/dashboard'
     | '/login'
     | '/quiz'
     | '/referrals'
+    | '/reset-password'
     | '/screener'
     | '/signup'
     | '/tutor'
+    | '/tutor-dashboard'
+    | '/auth/callback'
+    | '/auth/forgot'
+    | '/auth/$role/login'
+    | '/auth/$role/register'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/auth'
     | '/courses'
     | '/dashboard'
     | '/login'
     | '/quiz'
     | '/referrals'
+    | '/reset-password'
     | '/screener'
     | '/signup'
     | '/tutor'
+    | '/tutor-dashboard'
+    | '/auth/callback'
+    | '/auth/forgot'
+    | '/auth/$role/login'
+    | '/auth/$role/register'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/auth'
     | '/courses'
     | '/dashboard'
     | '/login'
     | '/quiz'
     | '/referrals'
+    | '/reset-password'
     | '/screener'
     | '/signup'
     | '/tutor'
+    | '/tutor-dashboard'
+    | '/auth/callback'
+    | '/auth/forgot'
+    | '/auth/$role/login'
+    | '/auth/$role/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  AuthRoute: typeof AuthRouteWithChildren
   CoursesRoute: typeof CoursesRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   QuizRoute: typeof QuizRoute
   ReferralsRoute: typeof ReferralsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ScreenerRoute: typeof ScreenerRoute
   SignupRoute: typeof SignupRoute
   TutorRoute: typeof TutorRoute
+  TutorDashboardRoute: typeof TutorDashboardRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tutor-dashboard': {
+      id: '/tutor-dashboard'
+      path: '/tutor-dashboard'
+      fullPath: '/tutor-dashboard'
+      preLoaderRoute: typeof TutorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tutor': {
       id: '/tutor'
       path: '/tutor'
@@ -181,6 +275,13 @@ declare module '@tanstack/react-router' {
       path: '/screener'
       fullPath: '/screener'
       preLoaderRoute: typeof ScreenerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/referrals': {
@@ -218,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -232,20 +340,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/forgot': {
+      id: '/auth/forgot'
+      path: '/forgot'
+      fullPath: '/auth/forgot'
+      preLoaderRoute: typeof AuthForgotRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/$role/register': {
+      id: '/auth/$role/register'
+      path: '/$role/register'
+      fullPath: '/auth/$role/register'
+      preLoaderRoute: typeof AuthRoleRegisterRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/$role/login': {
+      id: '/auth/$role/login'
+      path: '/$role/login'
+      fullPath: '/auth/$role/login'
+      preLoaderRoute: typeof AuthRoleLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
+
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthForgotRoute: typeof AuthForgotRoute
+  AuthRoleLoginRoute: typeof AuthRoleLoginRoute
+  AuthRoleRegisterRoute: typeof AuthRoleRegisterRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+  AuthForgotRoute: AuthForgotRoute,
+  AuthRoleLoginRoute: AuthRoleLoginRoute,
+  AuthRoleRegisterRoute: AuthRoleRegisterRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  AuthRoute: AuthRouteWithChildren,
   CoursesRoute: CoursesRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   QuizRoute: QuizRoute,
   ReferralsRoute: ReferralsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ScreenerRoute: ScreenerRoute,
   SignupRoute: SignupRoute,
   TutorRoute: TutorRoute,
+  TutorDashboardRoute: TutorDashboardRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
