@@ -57,4 +57,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export const useAuth = () => useContext(Ctx);
 
 export const dashboardPath = (r: Role | null) =>
-  r === "admin" ? "/admin" : r === "tutor" ? "/tutor-dashboard" : "/dashboard";
+  r === "admin" ? "/admin-dashboard" : r === "tutor" ? "/tutor-dashboard" : "/student-dashboard";

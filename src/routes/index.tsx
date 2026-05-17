@@ -77,7 +77,7 @@ function Landing() {
               Start learning free <ArrowRight className="size-4 group-hover:translate-x-0.5 transition" />
             </Link>
             <Link
-              to="/dashboard"
+              to="/student-dashboard"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass-strong hover:bg-foreground/10 transition"
             >
               <Play className="size-4" /> View live demo
@@ -97,7 +97,7 @@ function Landing() {
                   <span className="size-2.5 rounded-full bg-destructive/60" />
                   <span className="size-2.5 rounded-full bg-warning/60" />
                   <span className="size-2.5 rounded-full bg-success/60" />
-                  <span className="ml-3 text-xs text-muted-foreground">candlemind.app/dashboard</span>
+                  <span className="ml-3 text-xs text-muted-foreground">candlemind.app/student-dashboard</span>
                 </div>
                 <div className="grid md:grid-cols-3 gap-3 p-4">
                   <div className="glass rounded-xl p-4">
@@ -224,7 +224,7 @@ function Landing() {
                 ))}
               </ul>
               <Link
-                to="/dashboard"
+                to="/student-dashboard"
                 className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition"
               >
                 Open the demo <ArrowRight className="size-4" />
