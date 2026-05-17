@@ -8,9 +8,9 @@ export const Route = createFileRoute("/auth")({
 });
 
 const roles = [
-  { id: "student", label: "Student", desc: "Learn the markets with AI tutor, courses, XP & quizzes.", icon: GraduationCap, color: "from-emerald-400 to-cyan-400" },
-  { id: "tutor", label: "Tutor", desc: "Create courses, track learners and grow your audience.", icon: Briefcase, color: "from-cyan-400 to-blue-500" },
-  { id: "admin", label: "Admin", desc: "Manage the platform, revenue, users and analytics.", icon: Shield, color: "from-violet-500 to-fuchsia-500" },
+  { id: "student", label: "Student", desc: "Learn the markets with AI tutor, courses, XP & quizzes.", icon: GraduationCap, color: "from-emerald-400 to-cyan-400", to: "/dashboard" },
+  { id: "tutor", label: "Tutor", desc: "Create courses, track learners and grow your audience.", icon: Briefcase, color: "from-cyan-400 to-blue-500", to: "/tutor-dashboard" },
+  { id: "admin", label: "Admin", desc: "Manage the platform, revenue, users and analytics.", icon: Shield, color: "from-violet-500 to-fuchsia-500", to: "/admin" },
 ] as const;
 
 function RoleChooser() {
