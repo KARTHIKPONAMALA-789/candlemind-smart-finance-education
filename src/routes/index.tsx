@@ -71,7 +71,7 @@ function Landing() {
             className="mt-8 flex flex-wrap items-center justify-center gap-3"
           >
             <Link
-              to="/signup"
+              to="/auth"
               className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
             >
               Start learning free <ArrowRight className="size-4 group-hover:translate-x-0.5 transition" />
@@ -309,7 +309,7 @@ function Landing() {
                   ))}
                 </ul>
                 <Link
-                  to="/signup"
+                  to="/auth"
                   className={`mt-6 block text-center py-2.5 rounded-xl font-medium transition
                     ${p.popular
                       ? "bg-[image:var(--gradient-primary)] text-background hover:shadow-[var(--shadow-glow)]"
@@ -336,7 +336,7 @@ function Landing() {
               Join thousands of learners turning market complexity into confident decisions.
             </p>
             <Link
-              to="/signup"
+              to="/auth"
               className="mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[image:var(--gradient-primary)] text-background font-medium hover:shadow-[var(--shadow-glow)] transition"
             >
               Get started free <ArrowRight className="size-4" />
