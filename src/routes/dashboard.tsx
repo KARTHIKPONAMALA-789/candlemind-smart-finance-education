@@ -162,7 +162,7 @@ function Dashboard() {
                 <tr><th className="text-left py-2 font-medium">Stock</th><th className="text-left font-medium">Qty</th><th className="text-left font-medium">Avg</th><th className="text-left font-medium">Last</th><th className="text-right font-medium">P/L</th></tr>
               </thead>
               <tbody>
-                {paperHoldings.map((h) => {
+                {holdings.map((h) => {
                   const pl = (h.last - h.avg) * h.qty;
                   return (
                     <tr key={h.ticker} className="border-b border-border last:border-none">
