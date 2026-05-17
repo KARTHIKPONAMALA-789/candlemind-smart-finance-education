@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Flame } from "lucide-react";
+import { Logo } from "@/components/site/Logo";
 
 export function Navbar() {
   return (
@@ -11,11 +11,9 @@ export function Navbar() {
       className="fixed top-4 inset-x-0 z-50 mx-auto max-w-6xl px-4"
     >
       <div className="glass-strong rounded-2xl px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="size-8 rounded-lg bg-[image:var(--gradient-primary)] grid place-items-center glow">
-            <Flame className="size-4 text-primary-foreground" />
-          </div>
-          <span className="font-display font-semibold tracking-tight">CandleMind</span>
+        <Link to="/" className="flex items-center gap-2 group" aria-label="CandleMinds home">
+          <Logo variant="mark" size={32} className="drop-shadow-[0_0_12px_rgba(0,200,83,0.35)]" />
+          <span className="font-display font-semibold tracking-tight hidden sm:inline">CandleMinds</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition">Features</a>
