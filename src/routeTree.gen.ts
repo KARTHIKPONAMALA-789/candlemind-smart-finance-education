@@ -21,13 +21,16 @@ import { Route as PsychologyRouteImport } from './routes/psychology'
 import { Route as PaperTradingRouteImport } from './routes/paper-trading'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LiveChartRouteImport } from './routes/live-chart'
+import { Route as DematRouteImport } from './routes/demat'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as BroadcastsRouteImport } from './routes/broadcasts'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DematSlugRouteImport } from './routes/demat.$slug'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AuthRoleRegisterRouteImport } from './routes/auth.$role.register'
 import { Route as AuthRoleLoginRouteImport } from './routes/auth.$role.login'
 
@@ -91,6 +94,11 @@ const LiveChartRoute = LiveChartRouteImport.update({
   path: '/live-chart',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DematRoute = DematRouteImport.update({
+  id: '/demat',
+  path: '/demat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesRoute = CoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -116,6 +124,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DematSlugRoute = DematSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => DematRoute,
+} as any)
 const AuthForgotRoute = AuthForgotRouteImport.update({
   id: '/forgot',
   path: '/forgot',
@@ -125,6 +138,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/callback',
   path: '/callback',
   getParentRoute: () => AuthRoute,
+} as any)
+const AdminReferralsRoute = AdminReferralsRouteImport.update({
+  id: '/admin/referrals',
+  path: '/admin/referrals',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoleRegisterRoute = AuthRoleRegisterRouteImport.update({
   id: '/$role/register',
@@ -143,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteWithChildren
   '/broadcasts': typeof BroadcastsRoute
   '/courses': typeof CoursesRoute
+  '/demat': typeof DematRouteWithChildren
   '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
@@ -155,8 +174,10 @@ export interface FileRoutesByFullPath {
   '/student-dashboard': typeof StudentDashboardRoute
   '/tutor': typeof TutorRoute
   '/tutor-dashboard': typeof TutorDashboardRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot': typeof AuthForgotRoute
+  '/demat/$slug': typeof DematSlugRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
   '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
@@ -166,6 +187,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
   '/broadcasts': typeof BroadcastsRoute
   '/courses': typeof CoursesRoute
+  '/demat': typeof DematRouteWithChildren
   '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
@@ -178,8 +200,10 @@ export interface FileRoutesByTo {
   '/student-dashboard': typeof StudentDashboardRoute
   '/tutor': typeof TutorRoute
   '/tutor-dashboard': typeof TutorDashboardRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot': typeof AuthForgotRoute
+  '/demat/$slug': typeof DematSlugRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
   '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
@@ -190,6 +214,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteWithChildren
   '/broadcasts': typeof BroadcastsRoute
   '/courses': typeof CoursesRoute
+  '/demat': typeof DematRouteWithChildren
   '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
@@ -202,8 +227,10 @@ export interface FileRoutesById {
   '/student-dashboard': typeof StudentDashboardRoute
   '/tutor': typeof TutorRoute
   '/tutor-dashboard': typeof TutorDashboardRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot': typeof AuthForgotRoute
+  '/demat/$slug': typeof DematSlugRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
   '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
@@ -215,6 +242,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/broadcasts'
     | '/courses'
+    | '/demat'
     | '/live-chart'
     | '/login'
     | '/paper-trading'
@@ -227,8 +255,10 @@ export interface FileRouteTypes {
     | '/student-dashboard'
     | '/tutor'
     | '/tutor-dashboard'
+    | '/admin/referrals'
     | '/auth/callback'
     | '/auth/forgot'
+    | '/demat/$slug'
     | '/auth/$role/login'
     | '/auth/$role/register'
   fileRoutesByTo: FileRoutesByTo
@@ -238,6 +268,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/broadcasts'
     | '/courses'
+    | '/demat'
     | '/live-chart'
     | '/login'
     | '/paper-trading'
@@ -250,8 +281,10 @@ export interface FileRouteTypes {
     | '/student-dashboard'
     | '/tutor'
     | '/tutor-dashboard'
+    | '/admin/referrals'
     | '/auth/callback'
     | '/auth/forgot'
+    | '/demat/$slug'
     | '/auth/$role/login'
     | '/auth/$role/register'
   id:
@@ -261,6 +294,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/broadcasts'
     | '/courses'
+    | '/demat'
     | '/live-chart'
     | '/login'
     | '/paper-trading'
@@ -273,8 +307,10 @@ export interface FileRouteTypes {
     | '/student-dashboard'
     | '/tutor'
     | '/tutor-dashboard'
+    | '/admin/referrals'
     | '/auth/callback'
     | '/auth/forgot'
+    | '/demat/$slug'
     | '/auth/$role/login'
     | '/auth/$role/register'
   fileRoutesById: FileRoutesById
@@ -285,6 +321,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   BroadcastsRoute: typeof BroadcastsRoute
   CoursesRoute: typeof CoursesRoute
+  DematRoute: typeof DematRouteWithChildren
   LiveChartRoute: typeof LiveChartRoute
   LoginRoute: typeof LoginRoute
   PaperTradingRoute: typeof PaperTradingRoute
@@ -297,6 +334,7 @@ export interface RootRouteChildren {
   StudentDashboardRoute: typeof StudentDashboardRoute
   TutorRoute: typeof TutorRoute
   TutorDashboardRoute: typeof TutorDashboardRoute
+  AdminReferralsRoute: typeof AdminReferralsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -385,6 +423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveChartRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demat': {
+      id: '/demat'
+      path: '/demat'
+      fullPath: '/demat'
+      preLoaderRoute: typeof DematRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses': {
       id: '/courses'
       path: '/courses'
@@ -420,6 +465,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demat/$slug': {
+      id: '/demat/$slug'
+      path: '/$slug'
+      fullPath: '/demat/$slug'
+      preLoaderRoute: typeof DematSlugRouteImport
+      parentRoute: typeof DematRoute
+    }
     '/auth/forgot': {
       id: '/auth/forgot'
       path: '/forgot'
@@ -433,6 +485,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/admin/referrals': {
+      id: '/admin/referrals'
+      path: '/admin/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AdminReferralsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/$role/register': {
       id: '/auth/$role/register'
@@ -467,12 +526,23 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface DematRouteChildren {
+  DematSlugRoute: typeof DematSlugRoute
+}
+
+const DematRouteChildren: DematRouteChildren = {
+  DematSlugRoute: DematSlugRoute,
+}
+
+const DematRouteWithChildren = DematRoute._addFileChildren(DematRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AuthRoute: AuthRouteWithChildren,
   BroadcastsRoute: BroadcastsRoute,
   CoursesRoute: CoursesRoute,
+  DematRoute: DematRouteWithChildren,
   LiveChartRoute: LiveChartRoute,
   LoginRoute: LoginRoute,
   PaperTradingRoute: PaperTradingRoute,
@@ -485,6 +555,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudentDashboardRoute: StudentDashboardRoute,
   TutorRoute: TutorRoute,
   TutorDashboardRoute: TutorDashboardRoute,
+  AdminReferralsRoute: AdminReferralsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
