@@ -73,6 +73,78 @@ export type Database = {
         }
         Relationships: []
       }
+      brokers: {
+        Row: {
+          account_opening_time: string | null
+          active: boolean
+          badges: string[]
+          best_for: string | null
+          brokerage: string
+          created_at: string
+          description: string
+          display_order: number
+          features: string[]
+          id: string
+          logo_url: string | null
+          min_deposit: string | null
+          name: string
+          rating: number
+          referral_url: string
+          slug: string
+          supports_delivery: boolean
+          supports_intraday: boolean
+          supports_margin: boolean
+          supports_options: boolean
+          updated_at: string
+        }
+        Insert: {
+          account_opening_time?: string | null
+          active?: boolean
+          badges?: string[]
+          best_for?: string | null
+          brokerage: string
+          created_at?: string
+          description: string
+          display_order?: number
+          features?: string[]
+          id?: string
+          logo_url?: string | null
+          min_deposit?: string | null
+          name: string
+          rating?: number
+          referral_url: string
+          slug: string
+          supports_delivery?: boolean
+          supports_intraday?: boolean
+          supports_margin?: boolean
+          supports_options?: boolean
+          updated_at?: string
+        }
+        Update: {
+          account_opening_time?: string | null
+          active?: boolean
+          badges?: string[]
+          best_for?: string | null
+          brokerage?: string
+          created_at?: string
+          description?: string
+          display_order?: number
+          features?: string[]
+          id?: string
+          logo_url?: string | null
+          min_deposit?: string | null
+          name?: string
+          rating?: number
+          referral_url?: string
+          slug?: string
+          supports_delivery?: boolean
+          supports_intraday?: boolean
+          supports_margin?: boolean
+          supports_options?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           category: string | null
@@ -353,6 +425,85 @@ export type Database = {
             columns: ["module_id"]
             isOneToOne: false
             referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_clicks: {
+        Row: {
+          broker_id: string
+          created_at: string
+          device: string | null
+          id: string
+          ip_hash: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          broker_id: string
+          created_at?: string
+          device?: string | null
+          id?: string
+          ip_hash?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          broker_id?: string
+          created_at?: string
+          device?: string | null
+          id?: string
+          ip_hash?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_clicks_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_conversions: {
+        Row: {
+          broker_id: string
+          id: string
+          notes: string | null
+          reported_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          broker_id: string
+          id?: string
+          notes?: string | null
+          reported_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          broker_id?: string
+          id?: string
+          notes?: string | null
+          reported_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_conversions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "brokers"
             referencedColumns: ["id"]
           },
         ]
