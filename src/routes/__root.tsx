@@ -4,9 +4,11 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 
@@ -121,12 +123,26 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function HashScroll() {
+  const { location } = useRouterState();
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = setTimeout(() => {
+      const el = document.getElementById(location.hash);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+    return () => clearTimeout(id);
+  }, [location.hash, location.pathname]);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <HashScroll />
         <Outlet />
         <Toaster position="top-right" theme="dark" />
       </AuthProvider>
