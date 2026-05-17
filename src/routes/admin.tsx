@@ -54,14 +54,20 @@ function Admin() {
   );
 }
 
+function useAdminData() {
+  return useQuery({ queryKey: ["admin-dashboard"], queryFn: fetchAdminOverview });
+}
+
 function Overview() {
+  const { data } = useAdminData();
+  const t = data?.totals;
   return (
     <>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Users} label="Total students" value="12,482" delta="+14.2%" />
-        <StatCard icon={GraduationCap} label="Total tutors" value="48" delta="+3 this month" />
-        <StatCard icon={DollarSign} label="Monthly revenue" value={<span className="gradient-text">$64.9K</span>} delta="+24.8%" />
-        <StatCard icon={BookOpen} label="Active enrollments" value="32,118" delta="+8.4%" />
+        <StatCard icon={Users} label="Total students" value={(t?.students ?? 0).toLocaleString()} delta="live" />
+        <StatCard icon={GraduationCap} label="Total tutors" value={(t?.tutors ?? 0).toLocaleString()} delta="live" />
+        <StatCard icon={BookOpen} label="Courses" value={(t?.courses ?? 0).toLocaleString()} delta={`${t?.enrollments ?? 0} enrollments`} />
+        <StatCard icon={CalendarClock} label="Live classes" value={(t?.liveClasses ?? 0).toLocaleString()} delta="scheduled" />
       </div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 glass-strong rounded-2xl p-6 relative overflow-hidden">
