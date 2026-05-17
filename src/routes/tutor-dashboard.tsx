@@ -129,7 +129,8 @@ function Overview() {
 }
 
 function CoursesTab() {
-  const { data, isLoading } = useTutorData();
+  const { data, isLoading, refetch } = useTutorData();
+  const qc = useQueryClient();
   const dbCourses = data?.courses ?? [];
   const rows = dbCourses.length
     ? dbCourses.map((c: any) => ({
@@ -139,6 +140,13 @@ function CoursesTab() {
       }))
     : [];
 
+  const togglePublish = async (id: string, current: boolean) => {
+    const { error } = await supabase.from("courses").update({ published: !current }).eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success(current ? "Moved to draft" : "Course published");
+    qc.invalidateQueries({ queryKey: ["tutor-dashboard"] });
+  };
+
   return (
     <div className="glass rounded-2xl p-5">
       <div className="flex items-center justify-between mb-4">
@@ -146,9 +154,9 @@ function CoursesTab() {
           <div className="text-sm font-medium">Your courses</div>
           <div className="text-xs text-muted-foreground">{isLoading ? "Loading…" : `${rows.length} course${rows.length === 1 ? "" : "s"}`}</div>
         </div>
-        <a href="/tutor-dashboard?tab=upload" className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition">
+        <Link to="/tutor-dashboard" search={{ tab: "upload" }} className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground font-medium hover:shadow-[var(--shadow-glow)] transition">
           <Plus className="size-3.5" /> New course
-        </a>
+        </Link>
       </div>
       {rows.length === 0 ? (
         <div className="text-center py-12 text-sm text-muted-foreground">
@@ -182,7 +190,9 @@ function CoursesTab() {
                     </div>
                   </td>
                   <td className="text-right text-xs">
-                    <button className="text-primary hover:underline">Edit</button>
+                    <button onClick={() => togglePublish(c.id, c.published)} className="text-primary hover:underline">
+                      {c.published ? "Unpublish" : "Publish"}
+                    </button>
                   </td>
                 </motion.tr>
               ))}
