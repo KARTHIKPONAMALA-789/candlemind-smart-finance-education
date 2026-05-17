@@ -13,9 +13,12 @@ export const Route = createFileRoute("/paper-trading")({
   component: PaperTrading,
 });
 
+const inr = (n: number) => "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+const inr2 = (n: number) => "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 function PaperTrading() {
   const [holdings, setHoldings] = useState(paperHoldings);
-  const [cash, setCash] = useState(10000);
+  const [cash, setCash] = useState(100000);
   const [selected, setSelected] = useState(stocks[0].ticker);
 
   const portfolioValue = useMemo(() => holdings.reduce((s, h) => s + h.last * h.qty, 0), [holdings]);
@@ -42,11 +45,11 @@ function PaperTrading() {
   };
 
   return (
-    <AppShell title="Paper Trading Simulator" subtitle="Practice with virtual capital — zero risk, real prices">
+    <AppShell title="Paper Trading Simulator" subtitle="Practice on NSE stocks with ₹1,00,000 virtual capital — zero risk, real prices">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Wallet} label="Portfolio value" value={<span className="gradient-text">${portfolioValue.toFixed(0)}</span>} delta="+8.4% all-time" />
-        <StatCard icon={TrendingUp} label="Total P/L" value={<span className={totalPL >= 0 ? "text-primary" : "text-destructive"}>{totalPL >= 0 ? "+" : ""}${totalPL.toFixed(2)}</span>} />
-        <StatCard icon={TrendingDown} label="Cash balance" value={`$${cash.toFixed(0)}`} />
+        <StatCard icon={Wallet} label="Portfolio value" value={<span className="gradient-text">{inr(portfolioValue)}</span>} delta="+8.4% all-time" />
+        <StatCard icon={TrendingUp} label="Total P/L" value={<span className={totalPL >= 0 ? "text-primary" : "text-destructive"}>{totalPL >= 0 ? "+" : ""}{inr2(totalPL)}</span>} />
+        <StatCard icon={TrendingDown} label="Cash balance" value={inr(cash)} />
         <StatCard icon={Wallet} label="Open positions" value={String(holdings.length)} />
       </div>
 
