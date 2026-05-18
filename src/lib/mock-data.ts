@@ -26,13 +26,20 @@ export const pricing = [
   { name: "Lifetime", price: 9999, period: "once", features: ["Everything in Pro", "Lifetime updates", "1:1 mentor calls", "Early features", "Private Telegram"], cta: "Buy lifetime" },
 ];
 
+import courseCandlesticks from "@/assets/course-candlesticks.jpg";
+import courseFundamentals from "@/assets/course-fundamentals.jpg";
+import courseFinancials from "@/assets/course-financials.jpg";
+import courseOptions from "@/assets/course-options.jpg";
+import coursePortfolio from "@/assets/course-portfolio.jpg";
+import courseRisk from "@/assets/course-risk.jpg";
+
 export const courses = [
-  { id: 1, title: "Candlestick Foundations", cat: "Technical", level: "Beginner", lessons: 24, progress: 72, color: "from-emerald-500 to-cyan-500" },
-  { id: 2, title: "Fundamental Analysis 101", cat: "Fundamental", level: "Beginner", lessons: 18, progress: 45, color: "from-cyan-500 to-blue-500" },
-  { id: 3, title: "Reading Indian Financial Statements", cat: "Fundamental", level: "Intermediate", lessons: 32, progress: 12, color: "from-blue-500 to-violet-500" },
-  { id: 4, title: "F&O — Futures & Options", cat: "Advanced", level: "Advanced", lessons: 40, progress: 0, color: "from-violet-500 to-pink-500" },
-  { id: 5, title: "Portfolio Construction", cat: "Strategy", level: "Intermediate", lessons: 22, progress: 88, color: "from-emerald-500 to-teal-500" },
-  { id: 6, title: "Risk & Position Sizing", cat: "Strategy", level: "Intermediate", lessons: 16, progress: 30, color: "from-amber-500 to-rose-500" },
+  { id: 1, title: "Candlestick Foundations", cat: "Technical", level: "Beginner", lessons: 24, progress: 72, color: "from-emerald-500 to-cyan-500", image: courseCandlesticks },
+  { id: 2, title: "Fundamental Analysis 101", cat: "Fundamental", level: "Beginner", lessons: 18, progress: 45, color: "from-cyan-500 to-blue-500", image: courseFundamentals },
+  { id: 3, title: "Reading Indian Financial Statements", cat: "Fundamental", level: "Intermediate", lessons: 32, progress: 12, color: "from-blue-500 to-violet-500", image: courseFinancials },
+  { id: 4, title: "F&O — Futures & Options", cat: "Advanced", level: "Advanced", lessons: 40, progress: 0, color: "from-violet-500 to-pink-500", image: courseOptions },
+  { id: 5, title: "Portfolio Construction", cat: "Strategy", level: "Intermediate", lessons: 22, progress: 88, color: "from-emerald-500 to-teal-500", image: coursePortfolio },
+  { id: 6, title: "Risk & Position Sizing", cat: "Strategy", level: "Intermediate", lessons: 16, progress: 30, color: "from-amber-500 to-rose-500", image: courseRisk },
 ];
 
 export const lessons = [
