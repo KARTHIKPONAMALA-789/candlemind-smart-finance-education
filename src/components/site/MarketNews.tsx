@@ -4,7 +4,7 @@ import { Newspaper, Loader2, Radio, RefreshCw } from "lucide-react";
 import { fetchMarketNews, NEWS_CATEGORIES, type NewsArticle } from "@/lib/news.functions";
 import { NewsCard } from "./NewsCard";
 
-const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+const REFRESH_MS = 2 * 60 * 1000; // 2 minutes — keep headlines fresh
 
 function TickerItem({ a }: { a: NewsArticle }) {
   return (
