@@ -95,7 +95,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
               <Bell className="size-4" />
             </button>
             <Link
-              to="/settings"
+              to="/"
               aria-label="Settings"
               className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition"
             >
