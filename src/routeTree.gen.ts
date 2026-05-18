@@ -11,21 +11,30 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TutorDashboardRouteImport } from './routes/tutor-dashboard'
 import { Route as TutorRouteImport } from './routes/tutor'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as StudentDashboardRouteImport } from './routes/student-dashboard'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScreenerRouteImport } from './routes/screener'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PsychologyRouteImport } from './routes/psychology'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PaperTradingRouteImport } from './routes/paper-trading'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LiveChartRouteImport } from './routes/live-chart'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DematRouteImport } from './routes/demat'
 import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BroadcastsRouteImport } from './routes/broadcasts'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DematSlugRouteImport } from './routes/demat.$slug'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
@@ -44,6 +53,16 @@ const TutorRoute = TutorRouteImport.update({
   path: '/tutor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
   id: '/student-dashboard',
   path: '/student-dashboard',
@@ -52,6 +71,11 @@ const StudentDashboardRoute = StudentDashboardRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScreenerRoute = ScreenerRouteImport.update({
@@ -79,6 +103,11 @@ const PsychologyRoute = PsychologyRouteImport.update({
   path: '/psychology',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PaperTradingRoute = PaperTradingRouteImport.update({
   id: '/paper-trading',
   path: '/paper-trading',
@@ -94,6 +123,11 @@ const LiveChartRoute = LiveChartRouteImport.update({
   path: '/live-chart',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DematRoute = DematRouteImport.update({
   id: '/demat',
   path: '/demat',
@@ -104,9 +138,24 @@ const CoursesRoute = CoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BroadcastsRoute = BroadcastsRouteImport.update({
   id: '/broadcasts',
   path: '/broadcasts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -117,6 +166,11 @@ const AuthRoute = AuthRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin-dashboard',
   path: '/admin-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -157,21 +211,30 @@ const AuthRoleLoginRoute = AuthRoleLoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/auth': typeof AuthRouteWithChildren
+  '/blog': typeof BlogRoute
   '/broadcasts': typeof BroadcastsRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/demat': typeof DematRouteWithChildren
+  '/faq': typeof FaqRoute
   '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
+  '/privacy': typeof PrivacyRoute
   '/psychology': typeof PsychologyRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/screener': typeof ScreenerRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/student-dashboard': typeof StudentDashboardRoute
+  '/support': typeof SupportRoute
+  '/terms': typeof TermsRoute
   '/tutor': typeof TutorRoute
   '/tutor-dashboard': typeof TutorDashboardRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -183,21 +246,30 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/auth': typeof AuthRouteWithChildren
+  '/blog': typeof BlogRoute
   '/broadcasts': typeof BroadcastsRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/demat': typeof DematRouteWithChildren
+  '/faq': typeof FaqRoute
   '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
+  '/privacy': typeof PrivacyRoute
   '/psychology': typeof PsychologyRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/screener': typeof ScreenerRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/student-dashboard': typeof StudentDashboardRoute
+  '/support': typeof SupportRoute
+  '/terms': typeof TermsRoute
   '/tutor': typeof TutorRoute
   '/tutor-dashboard': typeof TutorDashboardRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -210,21 +282,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/auth': typeof AuthRouteWithChildren
+  '/blog': typeof BlogRoute
   '/broadcasts': typeof BroadcastsRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/demat': typeof DematRouteWithChildren
+  '/faq': typeof FaqRoute
   '/live-chart': typeof LiveChartRoute
   '/login': typeof LoginRoute
   '/paper-trading': typeof PaperTradingRoute
+  '/privacy': typeof PrivacyRoute
   '/psychology': typeof PsychologyRoute
   '/quiz': typeof QuizRoute
   '/referrals': typeof ReferralsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/screener': typeof ScreenerRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/student-dashboard': typeof StudentDashboardRoute
+  '/support': typeof SupportRoute
+  '/terms': typeof TermsRoute
   '/tutor': typeof TutorRoute
   '/tutor-dashboard': typeof TutorDashboardRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -238,21 +319,30 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin-dashboard'
     | '/auth'
+    | '/blog'
     | '/broadcasts'
+    | '/careers'
+    | '/contact'
     | '/courses'
     | '/demat'
+    | '/faq'
     | '/live-chart'
     | '/login'
     | '/paper-trading'
+    | '/privacy'
     | '/psychology'
     | '/quiz'
     | '/referrals'
     | '/reset-password'
     | '/screener'
+    | '/settings'
     | '/signup'
     | '/student-dashboard'
+    | '/support'
+    | '/terms'
     | '/tutor'
     | '/tutor-dashboard'
     | '/admin/referrals'
@@ -264,21 +354,30 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/admin-dashboard'
     | '/auth'
+    | '/blog'
     | '/broadcasts'
+    | '/careers'
+    | '/contact'
     | '/courses'
     | '/demat'
+    | '/faq'
     | '/live-chart'
     | '/login'
     | '/paper-trading'
+    | '/privacy'
     | '/psychology'
     | '/quiz'
     | '/referrals'
     | '/reset-password'
     | '/screener'
+    | '/settings'
     | '/signup'
     | '/student-dashboard'
+    | '/support'
+    | '/terms'
     | '/tutor'
     | '/tutor-dashboard'
     | '/admin/referrals'
@@ -290,21 +389,30 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin-dashboard'
     | '/auth'
+    | '/blog'
     | '/broadcasts'
+    | '/careers'
+    | '/contact'
     | '/courses'
     | '/demat'
+    | '/faq'
     | '/live-chart'
     | '/login'
     | '/paper-trading'
+    | '/privacy'
     | '/psychology'
     | '/quiz'
     | '/referrals'
     | '/reset-password'
     | '/screener'
+    | '/settings'
     | '/signup'
     | '/student-dashboard'
+    | '/support'
+    | '/terms'
     | '/tutor'
     | '/tutor-dashboard'
     | '/admin/referrals'
@@ -317,21 +425,30 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AuthRoute: typeof AuthRouteWithChildren
+  BlogRoute: typeof BlogRoute
   BroadcastsRoute: typeof BroadcastsRoute
+  CareersRoute: typeof CareersRoute
+  ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRoute
   DematRoute: typeof DematRouteWithChildren
+  FaqRoute: typeof FaqRoute
   LiveChartRoute: typeof LiveChartRoute
   LoginRoute: typeof LoginRoute
   PaperTradingRoute: typeof PaperTradingRoute
+  PrivacyRoute: typeof PrivacyRoute
   PsychologyRoute: typeof PsychologyRoute
   QuizRoute: typeof QuizRoute
   ReferralsRoute: typeof ReferralsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ScreenerRoute: typeof ScreenerRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
+  SupportRoute: typeof SupportRoute
+  TermsRoute: typeof TermsRoute
   TutorRoute: typeof TutorRoute
   TutorDashboardRoute: typeof TutorDashboardRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
@@ -353,6 +470,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TutorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student-dashboard': {
       id: '/student-dashboard'
       path: '/student-dashboard'
@@ -365,6 +496,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/screener': {
@@ -402,6 +540,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PsychologyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/paper-trading': {
       id: '/paper-trading'
       path: '/paper-trading'
@@ -423,6 +568,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveChartRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demat': {
       id: '/demat'
       path: '/demat'
@@ -437,11 +589,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/broadcasts': {
       id: '/broadcasts'
       path: '/broadcasts'
       fullPath: '/broadcasts'
       preLoaderRoute: typeof BroadcastsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -456,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/admin-dashboard'
       fullPath: '/admin-dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -538,21 +718,30 @@ const DematRouteWithChildren = DematRoute._addFileChildren(DematRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AuthRoute: AuthRouteWithChildren,
+  BlogRoute: BlogRoute,
   BroadcastsRoute: BroadcastsRoute,
+  CareersRoute: CareersRoute,
+  ContactRoute: ContactRoute,
   CoursesRoute: CoursesRoute,
   DematRoute: DematRouteWithChildren,
+  FaqRoute: FaqRoute,
   LiveChartRoute: LiveChartRoute,
   LoginRoute: LoginRoute,
   PaperTradingRoute: PaperTradingRoute,
+  PrivacyRoute: PrivacyRoute,
   PsychologyRoute: PsychologyRoute,
   QuizRoute: QuizRoute,
   ReferralsRoute: ReferralsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ScreenerRoute: ScreenerRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   StudentDashboardRoute: StudentDashboardRoute,
+  SupportRoute: SupportRoute,
+  TermsRoute: TermsRoute,
   TutorRoute: TutorRoute,
   TutorDashboardRoute: TutorDashboardRoute,
   AdminReferralsRoute: AdminReferralsRoute,

@@ -94,9 +94,13 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
             <button className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition">
               <Bell className="size-4" />
             </button>
-            <button className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition">
+            <Link
+              to="/settings"
+              aria-label="Settings"
+              className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition"
+            >
               <Settings className="size-4" />
-            </button>
+            </Link>
           </div>
         </header>
         <motion.main

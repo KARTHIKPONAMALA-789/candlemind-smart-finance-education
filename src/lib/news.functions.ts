@@ -89,11 +89,17 @@ export const fetchMarketNews = createServerFn({ method: "POST" })
     const key = process.env.NEWS_API_KEY;
     if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
     const q = CATEGORY_QUERIES[data.category] ?? CATEGORY_QUERIES.All;
+    // Only return articles from the last 2 days so the feed always reflects today's news.
+    const from = new Date();
+    from.setUTCDate(from.getUTCDate() - 2);
+    const fromIso = `${from.getUTCFullYear()}-${pad(from.getUTCMonth() + 1)}-${pad(from.getUTCDate())}`;
     try {
       const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
         q
-      )}&language=en&sortBy=publishedAt&pageSize=18&apiKey=${key}`;
-      const res = await fetch(url, { headers: { "User-Agent": "CandleMinds/1.0" } });
+      )}&language=en&sortBy=publishedAt&pageSize=24&from=${fromIso}&apiKey=${key}`;
+      const res = await fetch(url, {
+        headers: { "User-Agent": "CandleMinds/1.0", "Cache-Control": "no-cache" },
+      });
       if (res.status === 429) return { articles: [], error: "rate_limited" };
       if (!res.ok) return { articles: [], error: `http_${res.status}` };
       const json = (await res.json()) as {
