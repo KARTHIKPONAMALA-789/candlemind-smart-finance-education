@@ -55,8 +55,20 @@ function Courses() {
             whileHover={{ y: -4 }}
             className="glass rounded-2xl overflow-hidden group"
           >
-            <div className={`h-36 bg-gradient-to-br ${c.color} relative`}>
-              <div className="absolute inset-0 grid-bg opacity-30" />
+            <div className={`h-36 bg-gradient-to-br ${c.color} relative overflow-hidden`}>
+              {c.image && (
+                <img
+                  src={c.image}
+                  alt={c.title}
+                  loading="lazy"
+                  width={1024}
+                  height={576}
+                  className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              )}
+              <div className={`absolute inset-0 bg-gradient-to-br ${c.color} mix-blend-overlay opacity-60`} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <div className="absolute inset-0 grid-bg opacity-20" />
               <div className="absolute top-3 left-3 text-xs glass-strong rounded-md px-2 py-0.5 text-primary-foreground">{c.cat}</div>
               <div className="absolute top-3 right-3 text-xs glass-strong rounded-md px-2 py-0.5 text-primary-foreground">{c.level}</div>
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-primary-foreground/90 text-xs">
