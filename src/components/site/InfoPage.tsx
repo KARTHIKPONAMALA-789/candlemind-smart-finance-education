@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
+import { BackButton } from "@/components/app/BackButton";
 
 export function InfoPage({ title, tagline, children }: { title: string; tagline?: string; children: ReactNode }) {
   return (
