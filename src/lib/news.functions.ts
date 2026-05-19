@@ -183,6 +183,9 @@ export const explainNewsAI = createServerFn({ method: "POST" })
         sentiment: "Neutral" as "Positive" | "Negative" | "Neutral",
         error: "missing_gemini_key",
       };
+    const cacheKey = `explain:${data.headline.slice(0, 200)}`;
+    const cached = cacheGet<{ explanation: string; sentiment: "Positive" | "Negative" | "Neutral"; error: string | null }>(cacheKey);
+    if (cached) return cached;
     const prompt = `News headline: "${data.headline}"
 Summary: "${data.summary || "(no summary provided)"}"
 Source: ${data.source || "Unknown"}
