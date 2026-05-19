@@ -52,6 +52,9 @@ export const fetchCompanyNews = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const key = process.env.FINNHUB_API_KEY;
     if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
+    const cacheKey = `company:${data.symbol.toUpperCase()}`;
+    const cached = cacheGet<{ articles: NewsArticle[]; error: string | null }>(cacheKey);
+    if (cached) return cached;
     const to = new Date();
     const from = new Date();
     from.setUTCDate(from.getUTCDate() - 30);
