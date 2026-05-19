@@ -156,7 +156,9 @@ export const fetchMarketNews = createServerFn({ method: "POST" })
           image: a.urlToImage || null,
           publishedAt: a.publishedAt ?? new Date().toISOString(),
         }));
-      return { articles, error: null };
+      const result = { articles, error: null };
+      cacheSet(cacheKey, result, 90 * 1000); // 90s — fresh but throttled
+      return result;
     } catch (e) {
       return { articles: [], error: String(e) };
     }
