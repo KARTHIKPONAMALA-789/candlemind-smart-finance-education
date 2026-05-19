@@ -116,6 +116,9 @@ export const fetchMarketNews = createServerFn({ method: "POST" })
     const key = process.env.NEWS_API_KEY;
     if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
     const q = CATEGORY_QUERIES[data.category] ?? CATEGORY_QUERIES.All;
+    const cacheKey = `market:${data.category}`;
+    const cached = cacheGet<{ articles: NewsArticle[]; error: string | null }>(cacheKey);
+    if (cached) return cached;
     // Only return articles from the last 2 days so the feed always reflects today's news.
     const from = new Date();
     from.setUTCDate(from.getUTCDate() - 2);
