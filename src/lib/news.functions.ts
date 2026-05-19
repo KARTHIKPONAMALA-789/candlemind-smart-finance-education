@@ -86,7 +86,9 @@ export const fetchCompanyNews = createServerFn({ method: "POST" })
           image: a.image || null,
           publishedAt: a.datetime ? new Date(a.datetime * 1000).toISOString() : new Date().toISOString(),
         }));
-      return { articles, error: null };
+      const result = { articles, error: null };
+      cacheSet(cacheKey, result, 5 * 60 * 1000); // 5 min
+      return result;
     } catch (e) {
       return { articles: [], error: String(e) };
     }
