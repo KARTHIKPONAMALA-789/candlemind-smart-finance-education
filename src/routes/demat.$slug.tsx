@@ -73,12 +73,14 @@ function BrokerDetail() {
 
         {b && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-strong rounded-2xl p-6 md:p-8">
-            <div className="flex items-start gap-4">
-              <div className="size-16 rounded-2xl bg-white grid place-items-center overflow-hidden shrink-0">
-                {b.logo_url && (
-                  <img src={b.logo_url} alt={`${b.name} logo`} loading="lazy" className="size-14 object-contain" />
-                )}
-              </div>
+            <div className="flex items-start gap-4 group">
+              <BrokerLogo
+                name={b.name}
+                logoUrl={b.logo_url}
+                size="lg"
+                trusted={b.badges.some((x) => /trusted|verified|official/i.test(x))}
+              />
+
               <div className="flex-1 min-w-0">
                 <h1 className="font-display text-2xl md:text-3xl font-semibold">{b.name}</h1>
                 <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
