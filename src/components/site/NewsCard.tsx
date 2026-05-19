@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ExternalLink, Sparkles, Loader2 } from "lucide-react";
 import { explainNewsAI, type NewsArticle } from "@/lib/news.functions";
