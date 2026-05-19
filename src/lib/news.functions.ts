@@ -233,7 +233,9 @@ Respond ONLY with a valid JSON object (no markdown, no code fences) of this exac
       } catch {
         // fall back to plain text
       }
-      return { explanation, sentiment, error: null };
+      const result = { explanation, sentiment, error: null };
+      cacheSet(cacheKey, result, 30 * 60 * 1000); // 30 min — AI explanation is stable
+      return result;
     } catch (e) {
       return { explanation: "", sentiment: "Neutral" as const, error: String(e) };
     }
