@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ExternalLink, Sparkles, Loader2 } from "lucide-react";
 import { explainNewsAI, type NewsArticle } from "@/lib/news.functions";
@@ -33,7 +33,7 @@ const sentimentStyles: Record<string, string> = {
   Neutral: "bg-muted/40 text-muted-foreground border-border",
 };
 
-export function NewsCard({ article, compact = false }: { article: NewsArticle; compact?: boolean }) {
+function NewsCardImpl({ article, compact = false }: { article: NewsArticle; compact?: boolean }) {
   const explainFn = useServerFn(explainNewsAI);
   const [loading, setLoading] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(null);
@@ -71,6 +71,7 @@ export function NewsCard({ article, compact = false }: { article: NewsArticle; c
             src={article.image}
             alt=""
             loading="lazy"
+            decoding="async"
             className="size-full object-cover"
             onError={(e) => {
               (e.currentTarget.parentElement as HTMLElement).style.display = "none";
@@ -139,3 +140,5 @@ export function NewsCard({ article, compact = false }: { article: NewsArticle; c
     </article>
   );
 }
+
+export const NewsCard = memo(NewsCardImpl);

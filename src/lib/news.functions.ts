@@ -1,6 +1,28 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+// Simple in-memory cache (per worker isolate). Dramatically reduces
+// upstream API calls (Finnhub, NewsAPI, Gemini) and speeds up responses.
+type CacheEntry<T> = { value: T; expires: number };
+const _cache = new Map<string, CacheEntry<unknown>>();
+function cacheGet<T>(key: string): T | null {
+  const hit = _cache.get(key);
+  if (!hit) return null;
+  if (hit.expires < Date.now()) {
+    _cache.delete(key);
+    return null;
+  }
+  return hit.value as T;
+}
+function cacheSet<T>(key: string, value: T, ttlMs: number) {
+  _cache.set(key, { value, expires: Date.now() + ttlMs });
+  // Soft cap to avoid unbounded growth in a long-lived isolate
+  if (_cache.size > 200) {
+    const firstKey = _cache.keys().next().value;
+    if (firstKey) _cache.delete(firstKey);
+  }
+}
+
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
@@ -30,6 +52,9 @@ export const fetchCompanyNews = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const key = process.env.FINNHUB_API_KEY;
     if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
+    const cacheKey = `company:${data.symbol.toUpperCase()}`;
+    const cached = cacheGet<{ articles: NewsArticle[]; error: string | null }>(cacheKey);
+    if (cached) return cached;
     const to = new Date();
     const from = new Date();
     from.setUTCDate(from.getUTCDate() - 30);
@@ -61,7 +86,9 @@ export const fetchCompanyNews = createServerFn({ method: "POST" })
           image: a.image || null,
           publishedAt: a.datetime ? new Date(a.datetime * 1000).toISOString() : new Date().toISOString(),
         }));
-      return { articles, error: null };
+      const result = { articles, error: null };
+      cacheSet(cacheKey, result, 5 * 60 * 1000); // 5 min
+      return result;
     } catch (e) {
       return { articles: [], error: String(e) };
     }
@@ -89,6 +116,9 @@ export const fetchMarketNews = createServerFn({ method: "POST" })
     const key = process.env.NEWS_API_KEY;
     if (!key) return { articles: [] as NewsArticle[], error: "missing_key" };
     const q = CATEGORY_QUERIES[data.category] ?? CATEGORY_QUERIES.All;
+    const cacheKey = `market:${data.category}`;
+    const cached = cacheGet<{ articles: NewsArticle[]; error: string | null }>(cacheKey);
+    if (cached) return cached;
     // Only return articles from the last 2 days so the feed always reflects today's news.
     const from = new Date();
     from.setUTCDate(from.getUTCDate() - 2);
@@ -126,7 +156,9 @@ export const fetchMarketNews = createServerFn({ method: "POST" })
           image: a.urlToImage || null,
           publishedAt: a.publishedAt ?? new Date().toISOString(),
         }));
-      return { articles, error: null };
+      const result = { articles, error: null };
+      cacheSet(cacheKey, result, 90 * 1000); // 90s — fresh but throttled
+      return result;
     } catch (e) {
       return { articles: [], error: String(e) };
     }
@@ -151,6 +183,9 @@ export const explainNewsAI = createServerFn({ method: "POST" })
         sentiment: "Neutral" as "Positive" | "Negative" | "Neutral",
         error: "missing_gemini_key",
       };
+    const cacheKey = `explain:${data.headline.slice(0, 200)}`;
+    const cached = cacheGet<{ explanation: string; sentiment: "Positive" | "Negative" | "Neutral"; error: string | null }>(cacheKey);
+    if (cached) return cached;
     const prompt = `News headline: "${data.headline}"
 Summary: "${data.summary || "(no summary provided)"}"
 Source: ${data.source || "Unknown"}
@@ -198,7 +233,9 @@ Respond ONLY with a valid JSON object (no markdown, no code fences) of this exac
       } catch {
         // fall back to plain text
       }
-      return { explanation, sentiment, error: null };
+      const result = { explanation, sentiment, error: null };
+      cacheSet(cacheKey, result, 30 * 60 * 1000); // 30 min — AI explanation is stable
+      return result;
     } catch (e) {
       return { explanation: "", sentiment: "Neutral" as const, error: String(e) };
     }
