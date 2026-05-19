@@ -1,6 +1,28 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+// Simple in-memory cache (per worker isolate). Dramatically reduces
+// upstream API calls (Finnhub, NewsAPI, Gemini) and speeds up responses.
+type CacheEntry<T> = { value: T; expires: number };
+const _cache = new Map<string, CacheEntry<unknown>>();
+function cacheGet<T>(key: string): T | null {
+  const hit = _cache.get(key);
+  if (!hit) return null;
+  if (hit.expires < Date.now()) {
+    _cache.delete(key);
+    return null;
+  }
+  return hit.value as T;
+}
+function cacheSet<T>(key: string, value: T, ttlMs: number) {
+  _cache.set(key, { value, expires: Date.now() + ttlMs });
+  // Soft cap to avoid unbounded growth in a long-lived isolate
+  if (_cache.size > 200) {
+    const firstKey = _cache.keys().next().value;
+    if (firstKey) _cache.delete(firstKey);
+  }
+}
+
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
