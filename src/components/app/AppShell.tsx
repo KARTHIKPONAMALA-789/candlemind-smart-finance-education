@@ -90,11 +90,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="hidden md:flex items-center gap-2 glass rounded-xl px-3 py-1.5 w-72">
-              <Search className="size-4 text-muted-foreground" />
-              <input className="bg-transparent outline-none text-sm flex-1" placeholder="Search lessons, stocks..." />
-              <kbd className="text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">⌘K</kbd>
-            </div>
+            <GlobalSearch />
             <button className="glass size-9 rounded-xl grid place-items-center hover:bg-foreground/10 transition">
               <Bell className="size-4" />
             </button>
