@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
+import { BackButton } from "@/components/app/BackButton";
 
 export function InfoPage({ title, tagline, children }: { title: string; tagline?: string; children: ReactNode }) {
   return (
@@ -9,8 +10,11 @@ export function InfoPage({ title, tagline, children }: { title: string; tagline?
       <Navbar />
       <main className="pt-32 pb-24 px-6">
         <article className="mx-auto max-w-3xl">
-          <div className="text-xs text-muted-foreground mb-3">
-            <Link to="/" className="hover:text-foreground">Home</Link> · {title}
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-xs text-muted-foreground">
+              <Link to="/" className="hover:text-foreground">Home</Link> · {title}
+            </div>
+            <BackButton />
           </div>
           <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight">
             {title}

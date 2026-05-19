@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { navForRole } from "@/lib/role-nav";
 import { Logo } from "@/components/site/Logo";
+import { BackButton } from "@/components/app/BackButton";
 
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -81,9 +82,12 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
 
       <div className="flex-1 min-w-0">
         <header className="h-16 border-b border-border px-4 lg:px-8 flex items-center justify-between bg-background/40 backdrop-blur-xl sticky top-0 z-30">
-          <div>
-            <h1 className="font-display text-xl font-semibold">{title}</h1>
-            {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+          <div className="flex items-center gap-3 min-w-0">
+            <BackButton />
+            <div className="min-w-0">
+              <h1 className="font-display text-xl font-semibold truncate">{title}</h1>
+              {subtitle && <p className="text-xs text-muted-foreground truncate">{subtitle}</p>}
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2 glass rounded-xl px-3 py-1.5 w-72">
