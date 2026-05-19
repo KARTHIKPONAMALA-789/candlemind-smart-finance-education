@@ -7,6 +7,7 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { getBrokerBySlug, trackBrokerClick, type Broker } from "@/lib/brokers.functions";
 import { useAuth } from "@/hooks/use-auth";
+import { BrokerLogo } from "@/components/site/BrokerLogo";
 
 export const Route = createFileRoute("/demat/$slug")({
   head: ({ params }) => ({
