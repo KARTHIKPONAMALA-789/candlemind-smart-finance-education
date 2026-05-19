@@ -71,6 +71,7 @@ function NewsCardImpl({ article, compact = false }: { article: NewsArticle; comp
             src={article.image}
             alt=""
             loading="lazy"
+            decoding="async"
             className="size-full object-cover"
             onError={(e) => {
               (e.currentTarget.parentElement as HTMLElement).style.display = "none";
