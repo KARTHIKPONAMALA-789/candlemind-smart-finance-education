@@ -33,7 +33,7 @@ const sentimentStyles: Record<string, string> = {
   Neutral: "bg-muted/40 text-muted-foreground border-border",
 };
 
-export function NewsCard({ article, compact = false }: { article: NewsArticle; compact?: boolean }) {
+function NewsCardImpl({ article, compact = false }: { article: NewsArticle; compact?: boolean }) {
   const explainFn = useServerFn(explainNewsAI);
   const [loading, setLoading] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(null);
