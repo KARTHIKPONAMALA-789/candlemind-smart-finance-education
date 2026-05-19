@@ -139,3 +139,5 @@ function NewsCardImpl({ article, compact = false }: { article: NewsArticle; comp
     </article>
   );
 }
+
+export const NewsCard = memo(NewsCardImpl);
