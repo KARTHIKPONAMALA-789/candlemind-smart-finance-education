@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Bell, Search, Settings, LogOut } from "lucide-react";
+import { Bell, Settings, LogOut } from "lucide-react";
 import { ReactNode } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { navForRole } from "@/lib/role-nav";
