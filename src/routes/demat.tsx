@@ -8,6 +8,7 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { listBrokers, trackBrokerClick, type Broker } from "@/lib/brokers.functions";
 import { useAuth } from "@/hooks/use-auth";
+import { BrokerLogo } from "@/components/site/BrokerLogo";
 
 export const Route = createFileRoute("/demat")({
   head: () => ({
@@ -185,20 +186,13 @@ function DematMarketplace() {
             >
               <div className="absolute -top-16 -right-16 size-48 rounded-full bg-[image:var(--gradient-primary)] opacity-0 group-hover:opacity-10 blur-3xl transition" />
               <div className="flex items-start gap-3 relative">
-                <div className="size-12 rounded-xl bg-white grid place-items-center overflow-hidden shrink-0">
-                  {b.logo_url ? (
-                    <img
-                      src={b.logo_url}
-                      alt={`${b.name} logo`}
-                      loading="lazy"
-                      decoding="async"
-                      className="size-10 object-contain"
-                      onError={(e) => ((e.currentTarget.style.display = "none"))}
-                    />
-                  ) : (
-                    <span className="font-display font-semibold text-foreground/80">{b.name[0]}</span>
-                  )}
-                </div>
+                <BrokerLogo
+                  name={b.name}
+                  logoUrl={b.logo_url}
+                  size="md"
+                  trusted={b.badges.some((x) => /trusted|verified|official/i.test(x))}
+                />
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="font-display font-semibold truncate">{b.name}</h3>
