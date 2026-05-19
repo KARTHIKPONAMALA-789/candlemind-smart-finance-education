@@ -97,11 +97,11 @@ export function GlobalSearch() {
       }));
 
     const tutorHits: Result[] = tutorsList
-      .filter((t: any) => match(t.name) || match(t.specialty))
+      .filter((t: any) => match(t.name) || match(t.email) || match(t.status))
       .map((t: any, i: number) => ({
         id: `t-${i}`,
         title: t.name,
-        subtitle: t.specialty,
+        subtitle: `${t.courses} courses · ${t.students} students`,
         to: "/tutor",
         group: "Tutors",
         icon: GraduationCap,
