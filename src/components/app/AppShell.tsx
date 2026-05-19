@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { navForRole } from "@/lib/role-nav";
 import { Logo } from "@/components/site/Logo";
 import { BackButton } from "@/components/app/BackButton";
+import { GlobalSearch } from "@/components/app/GlobalSearch";
 
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
